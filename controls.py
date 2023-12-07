@@ -2,10 +2,6 @@ import numpy as np
 import fourier
 from scipy.signal.windows import boxcar, hamming, hann, gaussian
 
-# def split_into_ranges(self, max_frequency, num_of_sliders):
-#   range_size = max_frequency / num_of_sliders
-#   self.uniform_freq_ranges = [[i * range_size + 1, (i + 1) * range_size ] for i in range(num_of_sliders)]
-#   print("uniform_freq_ranges", self.uniform_freq_ranges)
 
 def update_plot(self, index, value):
   print("index: ",index)
@@ -81,7 +77,7 @@ def create_window_function(window_type, length):
         window_function = hann(length)
     elif window_type == "Gaussian":
         # Adjust window_params as needed
-        window_function = gaussian(length, std=3)  # STD msh 3aref teb2a static wla eluser bydkhalha
+        window_function = gaussian(length, std=3)
     else:
         raise ValueError("Invalid window type")
 

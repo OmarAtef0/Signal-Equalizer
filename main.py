@@ -6,8 +6,8 @@ from PyQt5.QtGui import QIcon
 from task3 import Ui_MainWindow
 from classes import *
 import pygame
-import cmath
 
+#IMPORT MODULES
 import audio
 import controls
 import spectogram
@@ -36,7 +36,7 @@ class SignalEqualizer(QMainWindow):
     self.ui.actionAnimals_Sound_Mode.triggered.connect(self.change_mode)
     self.ui.actionECG_Mode.triggered.connect(self.change_mode)
 
-    # magnitude sliders
+    # SLIDERS DICTIONARY
     self.sliders_dict = {
     "Uniform Range Mode": 10,
     "Musical Instruments Mode": 4,
@@ -85,10 +85,7 @@ class SignalEqualizer(QMainWindow):
     self.ui.play_pause_btn.clicked.connect(self.toggle_playback)
     self.ui.play_pause_btn.clicked.connect(lambda: audio.play_audio(self, self.audio_file))
   
-    self.MaxX = 0
-    self.MinX = 0
-    self.MaxY = 0
-    self.MinY = 0
+    self.MaxX, self.MinX, self.MaxY, self.MinY = 0, 0, 0, 0
 
     self.ui.plot_1.setLabel('left', 'Amplitude')
     self.ui.plot_1.setLabel('bottom', 'Time (s)')
@@ -99,18 +96,33 @@ class SignalEqualizer(QMainWindow):
 
     self.ui.comboBox.currentIndexChanged.connect(lambda: controls.visualize_window(self))
 
-    self.uniform_freq_ranges = []
+    self.axes1, self.axes2 = None, None
 
-    self.axes1 = None
-    self.ok = True
-    self.axes2 = None
+    self.figure1, self.figure2 = None, None
 
-    self.figure1 = None
-    self.figure2 = None
+    self.music_dict = [
+      [0, 1000],
+      [1001, 2000],
+      [2001, 3000],
+      [3001,4000]
+      ]
 
-    self.music_dict = [[0, 1000],[1001, 2000],[2001, 3000],[3001,4000]]
-
-    self.uniform_freq_ranges = [[0.0, 1000.0], [1001.0, 2000.0], [2001.0, 3000.0], [3001.0, 4000.0], [4001.0, 5000.0], [5001.0, 6000.0], [6001.0, 7000.0], [7001.0, 8000.0], [8001.0, 9000.0], [9001.0, 10000.0]]
+    self.uniform_freq_ranges = [
+      [0.0, 1000.0], 
+      [1001.0, 2000.0], 
+      [2001.0, 3000.0], 
+      [3001.0, 4000.0], 
+      [4001.0, 5000.0], 
+      [5001.0, 6000.0], 
+      [6001.0, 7000.0], 
+      [7001.0, 8000.0], 
+      [8001.0, 9000.0], 
+      [9001.0, 10000.0]
+      ]
+    
+    self.animal_freq_ranges = []
+    
+    self.arrythmia_freq_ranges = []
     
     self.ui.ShowHide_1.stateChanged.connect(lambda: spectogram.toggle_spectrogram(self, self.ui.Spectrogram_1))
     self.ui.ShowHide_2.stateChanged.connect(lambda: spectogram.toggle_spectrogram(self, self.ui.Spectrogram_2))
@@ -127,14 +139,14 @@ class SignalEqualizer(QMainWindow):
     self.ui.plot_1.clear()
     self.ui.plot_2.clear()
     self.ui.plot_3.clear()
-    
-    self.ui.plot_1.plot(self.input_signal.time, self.input_signal.t_amplitude)
-    self.ui.plot_2.plot(self.output_signal.time, self.output_signal.t_amplitude)
 
     y_range = (0, max(self.original_signal_f_amplitude)*1.2)
     self.ui.plot_3.setYRange(*y_range)
 
+    self.ui.plot_1.plot(self.input_signal.time, self.input_signal.t_amplitude)
+    self.ui.plot_2.plot(self.output_signal.time, self.output_signal.t_amplitude)
     self.ui.plot_3.plot(self.output_signal.frequency, self.output_signal.f_amplitude)
+    self.ui.plot_3.showGrid(True, True)
     self.draw_spectrograms()
 
   def toggle_playback(self):
@@ -170,23 +182,23 @@ class SignalEqualizer(QMainWindow):
     self.ui.plot_2.setXRange(self.x_range[0], self.x_range[1])
 
   def reset_plots(self):
-    self.x_range = [0.0, 10.0]
 
     if self.ui.play_pause_btn.text() == "Pause" and self.current_mode == "Musical Instruments Mode" or self.current_mode == "Animals Sound Mode":
       audio._play_audio(self)
 
+    self.x_range = [0.0, 10.0]
     self.ui.verticalScrollBar_1.setValue(0)
     self.ui.horizontalScrollBar_1.setValue(0)
     self.ui.verticalScrollBar_2.setValue(0)
     self.ui.horizontalScrollBar_2.setValue(0)
-
+    self.ui.speed_slider.setValue(4)
+    
     self.ui.plot_1.setXRange(self.x_range[0], self.x_range[1])
     self.ui.plot_2.setXRange(self.x_range[0], self.x_range[1])
 
-    self.x_range_speed_1 = 0.05
-    self.x_range_speed_2 = 0.05
+    self.x_range_speed_1 = 0.08
+    self.x_range_speed_2 = 0.08
 
-    self.ui.speed_slider.setValue(4)
     self.update_playback_speed(self.ui.speed_slider.value())
 
   def update_plots(self):
@@ -210,19 +222,21 @@ class SignalEqualizer(QMainWindow):
     self.x_range_speed = (value / 100.0) + 0.12
 
   def clear(self):
+    
+    #clear plots
     self.ui.plot_1.clear() 
     self.ui.plot_2.clear()
     self.ui.plot_3.clear()
     self.ui.plot_5.clear()
 
-    spectogram.clear_spectrogram(self.ui.Spectrogram_1)
-    spectogram.clear_spectrogram(self.ui.Spectrogram_2)
     #clear input and output
     self.browsed_signal = SampledSignal()
     self.input_signal = Signal()
     self.output_signal = Signal()
 
     #clear spectrogram
+    spectogram.clear_spectrogram(self.ui.Spectrogram_1)
+    spectogram.clear_spectrogram(self.ui.Spectrogram_2)
 
   def change_mode(self):
     self.clear()
@@ -239,35 +253,15 @@ class SignalEqualizer(QMainWindow):
     self.num_of_sliders = self.sliders_dict[self.current_mode]
 
     # Loop to initialize vertical sliders
-    self.ui.verticalSlider_1.valueChanged.connect(lambda: controls.update_plot(self, 0, self.ui.verticalSlider_1.value()))
-    self.ui.verticalSlider_1.setVisible(True)
+    for slider_number in range(1, 11):
+        slider = getattr(self.ui, f"verticalSlider_{slider_number}")
+        
+        # Connect each slider's valueChanged signal to a common function
+        slider.valueChanged.connect(lambda value, slider_number=slider_number-1: controls.update_plot(self, slider_number, value))
+        
+        # Make the slider visible
+        slider.setVisible(True)
 
-    self.ui.verticalSlider_2.valueChanged.connect(lambda: controls.update_plot(self, 1, self.ui.verticalSlider_2.value()))
-    self.ui.verticalSlider_2.setVisible(True)
-
-    self.ui.verticalSlider_3.valueChanged.connect(lambda: controls.update_plot(self, 2, self.ui.verticalSlider_3.value()))
-    self.ui.verticalSlider_3.setVisible(True)
-
-    self.ui.verticalSlider_4.valueChanged.connect(lambda: controls.update_plot(self, 3, self.ui.verticalSlider_4.value()))
-    self.ui.verticalSlider_4.setVisible(True)
-
-    self.ui.verticalSlider_5.valueChanged.connect(lambda: controls.update_plot(self, 4, self.ui.verticalSlider_5.value()))
-    self.ui.verticalSlider_5.setVisible(True)
-
-    self.ui.verticalSlider_6.valueChanged.connect(lambda: controls.update_plot(self, 5, self.ui.verticalSlider_6.value()))
-    self.ui.verticalSlider_6.setVisible(True)
-
-    self.ui.verticalSlider_7.valueChanged.connect(lambda: controls.update_plot(self, 6, self.ui.verticalSlider_7.value()))
-    self.ui.verticalSlider_7.setVisible(True)
-
-    self.ui.verticalSlider_8.valueChanged.connect(lambda: controls.update_plot(self, 7, self.ui.verticalSlider_8.value()))
-    self.ui.verticalSlider_8.setVisible(True)
-
-    self.ui.verticalSlider_9.valueChanged.connect(lambda: controls.update_plot(self, 8, self.ui.verticalSlider_9.value()))
-    self.ui.verticalSlider_9.setVisible(True)
-
-    self.ui.verticalSlider_10.valueChanged.connect(lambda: controls.update_plot(self, 9, self.ui.verticalSlider_10.value()))
-    self.ui.verticalSlider_10.setVisible(True)
     
     # hiding unused sliders
     for slider_number in range(self.num_of_sliders + 1, 11):
