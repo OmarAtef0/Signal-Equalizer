@@ -215,6 +215,8 @@ class SignalEqualizer(QMainWindow):
     self.ui.plot_3.clear()
     self.ui.plot_5.clear()
 
+    spectogram.clear_spectrogram(self.ui.Spectrogram_1)
+    spectogram.clear_spectrogram(self.ui.Spectrogram_2)
     #clear input and output
     self.browsed_signal = SampledSignal()
     self.input_signal = Signal()
