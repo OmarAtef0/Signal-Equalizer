@@ -58,10 +58,6 @@ class SignalEqualizer(QMainWindow):
     # self.ui.plot_3.setMouseEnabled(x=False, y=False)
     # self.ui.plot_5.setMouseEnabled(x=False, y=False)
 
-    # speed slider
-    self.ui.speed_slider.setMinimum(1)
-    self.ui.speed_slider.valueChanged.connect(self.update_playback_speed)
-
     # zoom
     self.ui.ZoomIn.clicked.connect(self.update_zoom_in)
     self.ui.ZoomOut.clicked.connect(self.update_zoom_out)
@@ -112,7 +108,9 @@ class SignalEqualizer(QMainWindow):
     self.figure1 = None
     self.figure2 = None
 
-    self.music_dict = [[0, 1100],[1200, 2700],[2750, 20000]]
+    self.music_dict = [[0, 1000],[1001, 2000],[2001, 3000],[3001,4000]]
+
+    self.uniform_freq_ranges = [[0.0, 1000.0], [1001.0, 2000.0], [2001.0, 3000.0], [3001.0, 4000.0], [4001.0, 5000.0], [5001.0, 6000.0], [6001.0, 7000.0], [7001.0, 8000.0], [8001.0, 9000.0], [9001.0, 10000.0]]
     
     self.ui.ShowHide_1.stateChanged.connect(lambda: spectogram.toggle_spectrogram(self, self.ui.Spectrogram_1))
     self.ui.ShowHide_2.stateChanged.connect(lambda: spectogram.toggle_spectrogram(self, self.ui.Spectrogram_2))
@@ -125,14 +123,19 @@ class SignalEqualizer(QMainWindow):
     self.axes1, self.figure1 = spectogram.CreateSpectrogram(self.axes1, self.figure1, self.ui.Spectrogram_1, self.input_signal.t_amplitude, self.input_signal.time)
     self.axes2, self.figure2 = spectogram.CreateSpectrogram(self.axes2, self.figure2, self.ui.Spectrogram_2, self.output_signal.t_amplitude, self.output_signal.time)
 
-  def convert_to_real(self, complex_list):
-    return [cmath.polar(complex_num)[0] for complex_num in complex_list]
-
   def draw(self):
+    self.ui.plot_1.clear()
+    self.ui.plot_2.clear()
+    self.ui.plot_3.clear()
+    
     self.ui.plot_1.plot(self.input_signal.time, self.input_signal.t_amplitude)
     self.ui.plot_2.plot(self.output_signal.time, self.output_signal.t_amplitude)
-    self.ui.plot_3.plot(self.output_signal.frequency, self.output_signal.f_amplitude)
 
+    y_range = (0, max(self.original_signal_f_amplitude)*1.2)
+    self.ui.plot_3.setYRange(*y_range)
+
+    self.ui.plot_3.plot(self.output_signal.frequency, self.output_signal.f_amplitude)
+    self.draw_spectrograms()
 
   def toggle_playback(self):
     if self.ui.play_pause_btn.text() == "Pause":
@@ -169,7 +172,7 @@ class SignalEqualizer(QMainWindow):
   def reset_plots(self):
     self.x_range = [0.0, 10.0]
 
-    if self.current_mode == "Musical Instruments Mode" or self.current_mode == "Animals Sound Mode":
+    if self.ui.play_pause_btn.text() == "Pause" and self.current_mode == "Musical Instruments Mode" or self.current_mode == "Animals Sound Mode":
       audio._play_audio(self)
 
     self.ui.verticalScrollBar_1.setValue(0)
@@ -230,9 +233,6 @@ class SignalEqualizer(QMainWindow):
           action.setChecked(False)
     
     print("current mode: ",self.current_mode)
-
-    if self.current_mode == "Uniform Range Mode":
-      controls.split_into_ranges(self, 10000, self.num_of_sliders)
 
     self.num_of_sliders = self.sliders_dict[self.current_mode]
 
@@ -302,37 +302,19 @@ class SignalEqualizer(QMainWindow):
 
     elif self.current_mode == "ECG Mode":
       self.browse_csv()
-      # Atrial Fibrillation (AF):
-      # Frequency range: 300 to 600 BPM
-
-      # Ventricular Tachycardia (VT):
-      # Frequency range: 100 to 250 BPM
-
-      # Atrial Flutter:
-      # Frequency range: 250 to 350 BPM
-
-      # divide by 60 -> Hz
     
     elif self.current_mode == "Musical Instruments Mode":
       audio.browse_audio(self)
-      #Guitar
-      #Drums
-      #Saxophone
-      #Accordion
 
     elif self.current_mode == "Animals Sound Mode":
       audio.browse_audio(self)
-      #Cat
-      #Dog
-      #Bird 
-      #Lion
     
     # first time to make fourier
     if len(self.input_signal.frequency) == 0:
       fourier.fourier_transfrom(self, self.input_signal.time, self.input_signal.t_amplitude)  
+      self.draw()
       controls.visualize_window(self)
-
-    self.original_signal_f_amplitude = list(self.output_signal.f_amplitude)
+      
 
 if __name__ == "__main__":
   app = QApplication(sys.argv)

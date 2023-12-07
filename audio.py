@@ -2,13 +2,15 @@ import numpy as np
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import  QFileDialog
 from classes import *
+import sounddevice as sd
 import pygame
 from scipy.io import wavfile
 
 def save_as_wav(self, amplitude):
   self.generated_audio_file = True
   amplitude_array = np.array(amplitude)
-  wavfile.write("dataset/output.wav", self.output_signal.sample_rate, amplitude_array.astype(np.int16))
+
+  # wavfile.write("dataset/output.wav", self.output_signal.sample_rate, amplitude_array.astype(np.int16))
   print("OUTPUUUUUUUT")
 
 def browse_audio(self):
@@ -37,12 +39,11 @@ def audio_data(self, filename):
   self.input_signal.time = time
   self.input_signal.t_amplitude = amplitude
   self.input_signal.sample_rate = sample_rate
-
-  self.output_signal.time = time
-  self.output_signal.t_amplitude = amplitude
   self.output_signal.sample_rate = sample_rate
   
 def play_audio(self, audio_file):
+  if self.current_mode != "Musical Instruments Mode" and self.current_mode != "Animals Sound Mode":
+     return
   if self.generated_audio_file:
     _play_audio(self)
     if self.playing:
@@ -65,7 +66,17 @@ def play_audio(self, audio_file):
 
 def _play_audio(self):
   if self.generated_audio_file:
-     pygame.mixer.music.load('dataset\output.wav')
+    amplitude_array = list(self.output_signal.t_amplitude)
+
+    # Normalize the amplitude array to be in the range [-1, 1]
+    amplitude_array = np.array(amplitude_array)
+    amplitude_array = amplitude_array / np.max(np.abs(amplitude_array))
+
+    # Play the audio using sounddevice
+    sd.play(amplitude_array, self.output_signal.sample_rate)
+    sd.wait()  # Wait for the audio to finish playing
+
+    # pygame.mixer.music.load('dataset\output.wav')
   else:
     pygame.mixer.music.load(self.audio_file)
     

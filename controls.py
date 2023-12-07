@@ -2,10 +2,10 @@ import numpy as np
 import fourier
 from scipy.signal.windows import boxcar, hamming, hann, gaussian
 
-def split_into_ranges(self, max_frequency, num_of_sliders):
-  range_size = max_frequency / num_of_sliders
-  self.uniform_freq_ranges = [[i * range_size, (i + 1) * range_size] for i in range(num_of_sliders)]
-  print("uniform_freq_ranges", self.uniform_freq_ranges)
+# def split_into_ranges(self, max_frequency, num_of_sliders):
+#   range_size = max_frequency / num_of_sliders
+#   self.uniform_freq_ranges = [[i * range_size + 1, (i + 1) * range_size ] for i in range(num_of_sliders)]
+#   print("uniform_freq_ranges", self.uniform_freq_ranges)
 
 def update_plot(self, index, value):
   print("index: ",index)
@@ -25,7 +25,6 @@ def update_plot(self, index, value):
   elif self.current_mode == "ECG Mode":
     update_frequency_range(self , [0,1000], 10**(value))
   
-
   # Apply IFFT to get the modified time-domain signal
   fourier.inverse_fourier(self)
 
@@ -41,6 +40,7 @@ def update_frequency_range(self, target_frequency_range, value):
   window_function *= value
   print("window_function: ",window_function)
 
+  print("Before")
   for target_i in self.target_indices[:5]:
     print(self.output_signal.f_amplitude[target_i])
 
@@ -50,8 +50,16 @@ def update_frequency_range(self, target_frequency_range, value):
     if target_i >= 0 and target_i < len(self.output_signal.f_amplitude): 
       self.output_signal.f_amplitude[target_i] = self.original_signal_f_amplitude[target_i] * window_function[index]
   
+  print("After")
   for target_i in self.target_indices[:5]:
     print(self.output_signal.f_amplitude[target_i])
+
+  error = 0
+  for i,value in enumerate(self.output_signal.f_amplitude):
+     error = error + abs(self.output_signal.f_amplitude[i] - self.original_signal_f_amplitude[i])
+
+  print("error: ",error)
+     
       
 def visualize_window(self):
     # Get window type from the UI
