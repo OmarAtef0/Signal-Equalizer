@@ -8,7 +8,7 @@ from scipy.io import wavfile
 def save_as_wav(self, amplitude):
   self.generated_audio_file = True
   amplitude_array = np.array(amplitude)
-  wavfile.write("dataset/filename.wav", self.output_signal.sample_rate, amplitude_array.astype(np.int16))
+  wavfile.write("dataset/output.wav", self.output_signal.sample_rate, amplitude_array.astype(np.int16))
   print("OUTPUUUUUUUT")
 
 def browse_audio(self):
