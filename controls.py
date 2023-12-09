@@ -4,8 +4,9 @@ from scipy.signal.windows import boxcar, hamming, hann, gaussian
 
 
 def update_plot(self, index, value):
-  print("index: ",index)
-  print("value: ", (value))
+  # print("index: ",index)
+  # print("value: ", (value))
+  
   if self.current_mode == "Uniform Range Mode":
     print(self.uniform_freq_ranges[index])
     update_frequency_range(self, self.uniform_freq_ranges[index], 10**(value))
@@ -15,7 +16,7 @@ def update_plot(self, index, value):
     update_frequency_range(self , self.music_dict[index], 10**(value))
 
   elif self.current_mode == "Animals Sound Mode":
-    update_frequency_range(self , [0,1000], 10**(value))
+    update_frequency_range(self , self.animal_dict[index], 10**(value))
 
   # make dict to map slider index to its frequency range
   elif self.current_mode == "ECG Mode":
@@ -34,27 +35,27 @@ def update_frequency_range(self, target_frequency_range, value):
   window_type = self.ui.comboBox.currentText()
   window_function = create_window_function(window_type, len(self.target_indices))
   window_function *= value
-  print("window_function: ",window_function)
+  # print("window_function: ",window_function)
 
-  print("Before")
-  for target_i in self.target_indices[:5]:
-    print(self.output_signal.f_amplitude[target_i])
+  # print("Before")
+  # for target_i in self.target_indices[:5]:
+  #   print(self.output_signal.f_amplitude[target_i])
 
-  print()
+  # print()
 
   for index, target_i in enumerate(self.target_indices):
     if target_i >= 0 and target_i < len(self.output_signal.f_amplitude): 
       self.output_signal.f_amplitude[target_i] = self.original_signal_f_amplitude[target_i] * window_function[index]
   
-  print("After")
-  for target_i in self.target_indices[:5]:
-    print(self.output_signal.f_amplitude[target_i])
+  # print("After")
+  # for target_i in self.target_indices[:5]:
+  #   print(self.output_signal.f_amplitude[target_i])
 
-  error = 0
-  for i,value in enumerate(self.output_signal.f_amplitude):
-     error = error + abs(self.output_signal.f_amplitude[i] - self.original_signal_f_amplitude[i])
+  # error = 0
+  # for i,value in enumerate(self.output_signal.f_amplitude):
+  #    error = error + abs(self.output_signal.f_amplitude[i] - self.original_signal_f_amplitude[i])
 
-  print("error: ",error)
+  # print("error: ",error)
      
       
 def visualize_window(self):
@@ -77,7 +78,7 @@ def create_window_function(window_type, length):
         window_function = hann(length)
     elif window_type == "Gaussian":
         # Adjust window_params as needed
-        window_function = gaussian(length, std=3)
+        window_function = gaussian(length, std=10)
     else:
         raise ValueError("Invalid window type")
 
