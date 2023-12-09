@@ -120,7 +120,12 @@ class SignalEqualizer(QMainWindow):
       [9001.0, 10000.0]
       ]
     
-    self.animal_freq_ranges = []
+    self.animal_dict = [
+        [600, 800],
+        [1000, 6000],
+        [0,3000]
+        [3800, 7000],
+      ]
     
     self.arrythmia_freq_ranges = []
     
@@ -161,8 +166,8 @@ class SignalEqualizer(QMainWindow):
     self.MaxX = max(self.input_signal.time)
     self.MinX = min(self.input_signal.time)
 
-    self.MaxY = max(self.input_signal.amplitude)
-    self.MinY = min(self.input_signal.amplitude)
+    self.MaxY = max(self.input_signal.t_amplitude)
+    self.MinY = min(self.input_signal.t_amplitude)
 
   def scroll_y(self, value):
     self.find_limits()
