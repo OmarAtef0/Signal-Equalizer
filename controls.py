@@ -1,7 +1,7 @@
 import numpy as np
 import fourier
 from scipy.signal.windows import boxcar, hamming, hann, gaussian
-
+from PyQt5.QtWidgets import *
 
 def update_plot(self, index, value):
   # print("index: ",index)
@@ -33,7 +33,7 @@ def update_frequency_range(self, target_frequency_range, value):
       self.target_indices.append(i)
 
   window_type = self.ui.comboBox.currentText()
-  window_function = create_window_function(window_type, len(self.target_indices))
+  window_function = create_window_function(self, window_type, len(self.target_indices))
   window_function *= value
   # print("window_function: ",window_function)
 
@@ -61,14 +61,16 @@ def update_frequency_range(self, target_frequency_range, value):
 def visualize_window(self):
     # Get window type from the UI
     window_type = self.ui.comboBox.currentText()
-
+    if window_type == "Gaussian":
+      get_guassian_std(self)
+    
     # Create and visualize the window
-    window_function = create_window_function(window_type, 100)
+    window_function = create_window_function(self, window_type, 100)
     self.ui.plot_5.clear()
     x = np.arange(len(window_function))
     self.ui.plot_5.plot(x, window_function)
 
-def create_window_function(window_type, length):
+def create_window_function(self, window_type, length):
     window_function = None
     if window_type == "Rectangle":
         window_function = boxcar(length)
@@ -78,11 +80,41 @@ def create_window_function(window_type, length):
         window_function = hann(length)
     elif window_type == "Gaussian":
         # Adjust window_params as needed
-        window_function = gaussian(length, std=10)
+        window_function = gaussian(length, std=self.Gaussian_std)
     else:
         raise ValueError("Invalid window type")
 
     return window_function
 
-    
-    
+def get_guassian_std(self):
+    dialog = gaussain_std(self)
+    result = dialog.exec_()
+
+    if result == QDialog.Accepted:
+        dialog_input  = dialog.parameter_input.text()
+        
+    try:
+      # Try to convert the entered value to an integer
+      self.Gaussian_std = int(dialog_input)
+      print("User entered parameter (as integer):", self.Gaussian_std )
+    except ValueError:
+        print("Invalid input. Please enter a valid integer.")
+
+class gaussain_std(QDialog):
+    def __init__(self, parent=None):
+        super(gaussain_std, self).__init__(parent)
+
+        self.setWindowTitle("Gaussian Standrad Deviation")
+        self.setGeometry(500, 500, 500, 150)
+
+        self.layout = QVBoxLayout(self)
+
+        self.label = QLabel("Enter Standrad Deviation Value:")
+        self.parameter_input = QLineEdit()
+
+        self.ok_button = QPushButton("OK")
+        self.ok_button.clicked.connect(self.accept)
+
+        self.layout.addWidget(self.label)
+        self.layout.addWidget(self.parameter_input)
+        self.layout.addWidget(self.ok_button)

@@ -95,16 +95,23 @@ class SignalEqualizer(QMainWindow):
     self.ui.plot_3.setLabel('bottom', 'Frequency (Hz)')
 
     self.ui.comboBox.currentIndexChanged.connect(lambda: controls.visualize_window(self))
-
+    self.Gaussian_std = 5
     self.axes1, self.axes2 = None, None
 
     self.figure1, self.figure2 = None, None
+    
+    self.MODES_dictionary = {
+      "Uniform Range Mode": [],
+      "ECG Mode": [],
+      "Musical Instruments Mode": [],
+      "Animals Sound Mode": []
+    }
 
     self.music_dict = [
-      [0, 1000],
-      [1001, 2000],
-      [2001, 3000],
-      [3001,4000]
+      [0, 1000], # drums Sound
+      [1000, 2000], #Violen Sound
+      [0, 2000], #Guitar Sound
+      [2000, 20000] #saxephone Sound
       ]
 
     self.uniform_freq_ranges = [
@@ -120,12 +127,7 @@ class SignalEqualizer(QMainWindow):
       [9001.0, 10000.0]
       ]
     
-    self.animal_dict = [
-        [600, 800],
-        [1000, 6000],
-        [0,3000]
-        [3800, 7000],
-      ]
+    self.animal_dict = []
     
     self.arrythmia_freq_ranges = []
     
@@ -298,18 +300,11 @@ class SignalEqualizer(QMainWindow):
         
   def open_signal(self):
     self.change_mode()
-    if self.current_mode == "Uniform Range Mode":
+    if self.current_mode == "Uniform Range Mode" or self.current_mode == "ECG Mode":
       self.browse_csv()
-
-    elif self.current_mode == "ECG Mode":
-      self.browse_csv()
-    
-    elif self.current_mode == "Musical Instruments Mode":
+    else:
       audio.browse_audio(self)
-
-    elif self.current_mode == "Animals Sound Mode":
-      audio.browse_audio(self)
-    
+      
     # first time to make fourier
     if len(self.input_signal.frequency) == 0:
       fourier.fourier_transfrom(self, self.input_signal.time, self.input_signal.t_amplitude)  

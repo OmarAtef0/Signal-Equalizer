@@ -11,16 +11,11 @@ def set_signal_attributes(self, signal, frequencies, fourier_coefficients):
 def fourier_transfrom(self, time, amplitude):
   
   # Perform FFT
+  fft_coef = fft.rfft(amplitude)
   # Calculate frequencies corresponding to the FFT result
   # This lines calculate the frequencies corresponding to the FFT result. fft.fftfreq function is used to 
   # generate an array of frequency values based on the length of the time array and the time step between samples.
-  if self.current_mode == "Musical Instruments Mode" or self.current_mode == "Animals Sound Mode":
-    fft_coef = fft.rfft(amplitude)
-    frequency = fft.rfftfreq(len(time), time[1] - time[0])
-  else:
-    fft_coef = fft.fft(amplitude)
-    frequency = fft.fftfreq(len(time), time[1] - time[0])
-  
+  frequency = fft.rfftfreq(len(time), time[1] - time[0])
 
   fft_amplitudes = np.abs(fft_coef)
   fft_angle= np.angle(fft_coef)
@@ -39,16 +34,11 @@ def fourier_transfrom(self, time, amplitude):
 
 def inverse_fourier(self):
   #perform Inverse Fourier Transform
-  if self.current_mode == "Musical Instruments Mode" or self.current_mode == "Animals Sound Mode":
-    fft_complex_amplitudes = fft.irfft(np.array(self.output_signal.f_amplitude) * np.exp(1j * np.array(self.output_signal.f_angle)))
-    # audio.save_as_wav(self, self.output_signal.t_amplitude) 
-  
-  else:
-    fft_complex_amplitudes = fft.ifft(np.array(self.output_signal.f_amplitude) * np.exp(1j * np.array(self.output_signal.f_angle)))
-  
+  fft_complex_amplitudes = fft.irfft(np.array(self.output_signal.f_amplitude) * np.exp(1j * np.array(self.output_signal.f_angle)))
+  audio.save_as_wav(self, self.output_signal.t_amplitude)   
   self.output_signal.time = self.input_signal.time  
   self.output_signal.t_amplitude = np.real(fft_complex_amplitudes)
-  
+
   # print("time amp before inverse ",self.output_signal.t_amplitude[0:5])
   # print("time amp after inverse: ",self.output_signal.t_amplitude[0:5])
   

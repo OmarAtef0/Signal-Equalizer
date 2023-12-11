@@ -45,7 +45,6 @@ def CreateSpectrogram(axes, figure, spectrogram_box, amplitude_list, time_list):
     axes.set_xlabel('Time (s)', color='white')
     axes.set_ylabel('Frequency (Hz)', color='white')
     figure.colorbar(axes.images[0], ax=axes, label='Intensity (dB)')
-
     return axes, figure
     
 def clear_spectrogram(layout):
