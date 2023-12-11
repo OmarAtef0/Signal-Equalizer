@@ -16,7 +16,7 @@ def update_plot(self, index, value):
     update_frequency_range(self , self.music_freq_ranges[index], 10**(value))
 
   elif self.current_mode == "Animals Sound Mode":
-    update_frequency_range(self , self.animal_dict[index], 10**(value))
+    update_frequency_range(self , self.animal_freq_ranges[index], 10**(value))
 
   # make dict to map slider index to its frequency range
   elif self.current_mode == "ECG Mode":
@@ -88,15 +88,18 @@ def create_window_function(self, window_type, length):
 
 def get_guassian_std(self):
     dialog = gaussain_std(self)
-    result = dialog.exec_()
+    result = dialog.exec()
+
+    # Initialize dialog_input with an empty string or a default value
+    dialog_input = ""
 
     if result == QDialog.Accepted:
-        dialog_input  = dialog.parameter_input.text()
-        
+        dialog_input = dialog.parameter_input.text()
+
     try:
-      # Try to convert the entered value to an integer
-      self.Gaussian_std = int(dialog_input)
-      print("User entered parameter (as integer):", self.Gaussian_std )
+        # Try to convert the entered value to an integer
+        self.Gaussian_std = int(dialog_input)
+        print("User entered parameter (as integer):", self.Gaussian_std)
     except ValueError:
         print("Invalid input. Please enter a valid integer.")
 

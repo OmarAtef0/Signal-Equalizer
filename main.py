@@ -12,7 +12,6 @@ import audio
 import controls
 import spectogram
 import fourier
-
 class SignalEqualizer(QMainWindow):
   
   def __init__(self):
@@ -98,38 +97,28 @@ class SignalEqualizer(QMainWindow):
     self.Gaussian_std = 5
     self.output_num = 1
 
-    self.uniform_freq_ranges = [
-      [0, 1000], 
-      [1001, 2000], 
-      [2001, 3000], 
-      [3001, 4000], 
-      [4001, 5000], 
-      [5001, 6000], 
-      [6001, 7000], 
-      [7001, 8000], 
-      [8001, 9000], 
-      [9001, 10000]
-      ]
-    
+    self.axes1, self.figure1 = None, None
+    self.axes2, self.figure2 = None, None
+
     self.music_freq_ranges = [
-      [0, 1000],
-      [1001, 2000],
-      [2001, 3000],
-      [3001,4000]
+      [0, 1000], #Drums
+      [0, 2000], #Guitar
+      [1000, 2000], #Violen
+      [2000, 20000] #saxephone
       ]
-    
+
     self.animal_freq_ranges = [
-      [0, 1000],
-      [1001, 2000],
-      [2001, 3000],
-      [3001,4000]
+      [0, 1500], #cows
+      [1500, 4000], #sheep
+      [500, 4000], #elephant
+      [4000, 10000] #birds
       ]
-    
+
     self.arrythmia_freq_ranges = [
-      [0, 1000],
-      [1001, 2000],
-      [2001, 3000],
-      [3001,4000]
+      [0, 12],
+      [10, 20],
+      [38, 96],
+      [150, 250]
       ]
     
     self.ui.ShowHide_1.stateChanged.connect(lambda: spectogram.toggle_spectrogram(self, self.ui.Spectrogram_1))
