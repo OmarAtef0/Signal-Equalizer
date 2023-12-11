@@ -1077,7 +1077,7 @@ QGroupBox::title  {
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(-5)</string>
+                   <string>10^(3)</string>
                   </property>
                  </widget>
                 </item>
@@ -1105,7 +1105,7 @@ QGroupBox::title  {
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(-5)</string>
+                   <string>10^(3)</string>
                   </property>
                  </widget>
                 </item>
@@ -1133,7 +1133,7 @@ QGroupBox::title  {
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(-5)</string>
+                   <string>10^(3)</string>
                   </property>
                  </widget>
                 </item>
@@ -1161,7 +1161,7 @@ QGroupBox::title  {
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(-5)</string>
+                   <string>10^(3)</string>
                   </property>
                  </widget>
                 </item>
@@ -1189,7 +1189,7 @@ QGroupBox::title  {
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(-5)</string>
+                   <string>10^(3)</string>
                   </property>
                  </widget>
                 </item>
@@ -1217,7 +1217,7 @@ QGroupBox::title  {
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(-5)</string>
+                   <string>10^(3)</string>
                   </property>
                  </widget>
                 </item>
@@ -1245,7 +1245,7 @@ QGroupBox::title  {
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(-5)</string>
+                   <string>10^(3)</string>
                   </property>
                  </widget>
                 </item>
@@ -1273,7 +1273,7 @@ QGroupBox::title  {
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(-5)</string>
+                   <string>10^(3)</string>
                   </property>
                  </widget>
                 </item>
@@ -1301,7 +1301,7 @@ QGroupBox::title  {
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(-5)</string>
+                   <string>10^(3)</string>
                   </property>
                  </widget>
                 </item>
@@ -1329,7 +1329,7 @@ QGroupBox::title  {
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(-5)</string>
+                   <string>10^(3)</string>
                   </property>
                  </widget>
                 </item>
@@ -1387,10 +1387,10 @@ QSlider::handle::hover{
 }</string>
                   </property>
                   <property name="minimum">
-                   <number>-5</number>
+                   <number>-3</number>
                   </property>
                   <property name="maximum">
-                   <number>5</number>
+                   <number>3</number>
                   </property>
                   <property name="singleStep">
                    <number>1</number>
@@ -1439,10 +1439,10 @@ QSlider::handle::hover{
 }</string>
                   </property>
                   <property name="minimum">
-                   <number>-5</number>
+                   <number>-3</number>
                   </property>
                   <property name="maximum">
-                   <number>5</number>
+                   <number>3</number>
                   </property>
                   <property name="singleStep">
                    <number>1</number>
@@ -1491,10 +1491,10 @@ QSlider::handle::hover{
 }</string>
                   </property>
                   <property name="minimum">
-                   <number>-5</number>
+                   <number>-3</number>
                   </property>
                   <property name="maximum">
-                   <number>5</number>
+                   <number>3</number>
                   </property>
                   <property name="singleStep">
                    <number>1</number>
@@ -1543,10 +1543,10 @@ QSlider::handle::hover{
 }</string>
                   </property>
                   <property name="minimum">
-                   <number>-5</number>
+                   <number>-3</number>
                   </property>
                   <property name="maximum">
-                   <number>5</number>
+                   <number>3</number>
                   </property>
                   <property name="pageStep">
                    <number>1</number>
@@ -1592,10 +1592,10 @@ QSlider::handle::hover{
 }</string>
                   </property>
                   <property name="minimum">
-                   <number>-5</number>
+                   <number>-3</number>
                   </property>
                   <property name="maximum">
-                   <number>5</number>
+                   <number>3</number>
                   </property>
                   <property name="pageStep">
                    <number>1</number>
@@ -1641,10 +1641,10 @@ QSlider::handle::hover{
 }</string>
                   </property>
                   <property name="minimum">
-                   <number>-5</number>
+                   <number>-3</number>
                   </property>
                   <property name="maximum">
-                   <number>5</number>
+                   <number>3</number>
                   </property>
                   <property name="pageStep">
                    <number>1</number>
@@ -1690,10 +1690,10 @@ QSlider::handle::hover{
 }</string>
                   </property>
                   <property name="minimum">
-                   <number>-5</number>
+                   <number>-3</number>
                   </property>
                   <property name="maximum">
-                   <number>5</number>
+                   <number>3</number>
                   </property>
                   <property name="pageStep">
                    <number>1</number>
@@ -1739,10 +1739,10 @@ QSlider::handle::hover{
 }</string>
                   </property>
                   <property name="minimum">
-                   <number>-5</number>
+                   <number>-3</number>
                   </property>
                   <property name="maximum">
-                   <number>5</number>
+                   <number>3</number>
                   </property>
                   <property name="pageStep">
                    <number>1</number>
@@ -1788,10 +1788,10 @@ QSlider::handle::hover{
 }</string>
                   </property>
                   <property name="minimum">
-                   <number>-5</number>
+                   <number>-3</number>
                   </property>
                   <property name="maximum">
-                   <number>5</number>
+                   <number>3</number>
                   </property>
                   <property name="pageStep">
                    <number>1</number>
@@ -1837,10 +1837,10 @@ QSlider::handle::hover{
 }</string>
                   </property>
                   <property name="minimum">
-                   <number>-5</number>
+                   <number>-3</number>
                   </property>
                   <property name="maximum">
-                   <number>5</number>
+                   <number>3</number>
                   </property>
                   <property name="pageStep">
                    <number>1</number>
@@ -1887,7 +1887,7 @@ QSlider::handle::hover{
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>40</width>
+                    <width>45</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -1895,7 +1895,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(5)</string>
+                   <string>10^(-3)</string>
                   </property>
                  </widget>
                 </item>
@@ -1915,7 +1915,7 @@ QSlider::handle::hover{
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>40</width>
+                    <width>45</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -1923,7 +1923,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(5)</string>
+                   <string>10^(-3)</string>
                   </property>
                  </widget>
                 </item>
@@ -1943,7 +1943,7 @@ QSlider::handle::hover{
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>40</width>
+                    <width>45</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -1951,7 +1951,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(5)</string>
+                   <string>10^(-3)</string>
                   </property>
                  </widget>
                 </item>
@@ -1971,7 +1971,7 @@ QSlider::handle::hover{
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>40</width>
+                    <width>45</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -1979,7 +1979,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(5)</string>
+                   <string>10^(-3)</string>
                   </property>
                  </widget>
                 </item>
@@ -1999,7 +1999,7 @@ QSlider::handle::hover{
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>40</width>
+                    <width>45</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -2007,7 +2007,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(5)</string>
+                   <string>10^(-3)</string>
                   </property>
                  </widget>
                 </item>
@@ -2027,7 +2027,7 @@ QSlider::handle::hover{
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>40</width>
+                    <width>45</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -2035,7 +2035,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(5)</string>
+                   <string>10^(-3)</string>
                   </property>
                  </widget>
                 </item>
@@ -2055,7 +2055,7 @@ QSlider::handle::hover{
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>40</width>
+                    <width>45</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -2063,7 +2063,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(5)</string>
+                   <string>10^(-3)</string>
                   </property>
                  </widget>
                 </item>
@@ -2083,7 +2083,7 @@ QSlider::handle::hover{
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>40</width>
+                    <width>45</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -2091,7 +2091,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(5)</string>
+                   <string>10^(-3)</string>
                   </property>
                  </widget>
                 </item>
@@ -2111,7 +2111,7 @@ QSlider::handle::hover{
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>40</width>
+                    <width>45</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -2119,7 +2119,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(5)</string>
+                   <string>10^(-3)</string>
                   </property>
                  </widget>
                 </item>
@@ -2139,7 +2139,7 @@ QSlider::handle::hover{
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>40</width>
+                    <width>45</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -2147,7 +2147,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>10^(5)</string>
+                   <string>10^(-3)</string>
                   </property>
                  </widget>
                 </item>
@@ -2192,7 +2192,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>0-0</string>
+                   <string>0-1000</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
@@ -2228,7 +2228,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>0-0</string>
+                   <string>1001-2000</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
@@ -2264,7 +2264,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>0-0</string>
+                   <string>2001-3000</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
@@ -2300,7 +2300,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>0-0</string>
+                   <string>3001-4000</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
@@ -2336,7 +2336,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>0-0</string>
+                   <string>4001-5000</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
@@ -2372,7 +2372,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>0-0</string>
+                   <string>5001-6000</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
@@ -2408,7 +2408,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>0-0</string>
+                   <string>6001-7000</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
@@ -2444,7 +2444,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>0-0</string>
+                   <string>7001-8000</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
@@ -2480,7 +2480,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>0-0</string>
+                   <string>8001-9000</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
@@ -2516,7 +2516,7 @@ QSlider::handle::hover{
                    <string notr="true">color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="text">
-                   <string>0-0</string>
+                   <string>9001-10000</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>

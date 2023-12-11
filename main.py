@@ -69,7 +69,7 @@ class SignalEqualizer(QMainWindow):
     self.x_range = [0.0, 10.0]
 
     # speed
-    self.x_range_speed = 0.08  
+    self.x_range_speed = 0.1
 
     # timer
     self.timer = QTimer(self)
@@ -96,6 +96,7 @@ class SignalEqualizer(QMainWindow):
 
     self.ui.comboBox.currentIndexChanged.connect(lambda: controls.visualize_window(self))
     self.Gaussian_std = 5
+    self.output_num = 1
 
     self.uniform_freq_ranges = [
       [0, 1000], 
@@ -112,7 +113,7 @@ class SignalEqualizer(QMainWindow):
     
     self.music_freq_ranges = [
       [0, 1000],
-      [100, 2000],
+      [1001, 2000],
       [2001, 3000],
       [3001,4000]
       ]
@@ -139,8 +140,8 @@ class SignalEqualizer(QMainWindow):
     pygame.mixer.init()
     
   def draw_spectrograms(self):
-    self.axes1, self.figure1 = spectogram.CreateSpectrogram(self.axes1, self.figure1, self.ui.Spectrogram_1, self.input_signal.t_amplitude, self.input_signal.time)
-    self.axes2, self.figure2 = spectogram.CreateSpectrogram(self.axes2, self.figure2, self.ui.Spectrogram_2, self.output_signal.t_amplitude, self.output_signal.time)
+    spectogram.CreateSpectrogram(self.axes1, self.figure1, self.ui.Spectrogram_1, self.input_signal.t_amplitude, self.input_signal.time)
+    spectogram.CreateSpectrogram(self.axes2, self.figure2, self.ui.Spectrogram_2, self.output_signal.t_amplitude, self.output_signal.time)
 
   def draw(self):
     self.ui.plot_1.clear()
@@ -189,7 +190,6 @@ class SignalEqualizer(QMainWindow):
     self.ui.plot_2.setXRange(self.x_range[0], self.x_range[1])
 
   def reset_plots(self):
-
     if self.ui.play_pause_btn.text() == "Pause" and self.current_mode == "Musical Instruments Mode" or self.current_mode == "Animals Sound Mode":
       audio._play_audio(self)
 
@@ -229,7 +229,6 @@ class SignalEqualizer(QMainWindow):
     self.x_range_speed = (value / 100.0) + 0.12
 
   def clear(self):
-    
     #clear plots
     self.ui.plot_1.clear() 
     self.ui.plot_2.clear()
@@ -259,44 +258,36 @@ class SignalEqualizer(QMainWindow):
 
     self.num_of_sliders = self.sliders_dict[self.current_mode]
 
-    # Loop to initialize vertical sliders
     for slider_number in range(1, 11):
       slider = getattr(self.ui, f"verticalSlider_{slider_number}")
-      
-      # Connect each slider's valueChanged signal to a common function
-      slider.valueChanged.connect(lambda value, slider_number=slider_number-1: controls.update_plot(self, slider_number, value))
-      
-      # Make the slider visible
-      slider.setVisible(True)
-
       label1 = getattr(self.ui, f"label_{slider_number}")
       label2 = getattr(self.ui, f"label_{10 + slider_number}")
       label3 = getattr(self.ui, f"label_{20 + slider_number}")
-      label1.setVisible(True)
-      label2.setVisible(True)
-      label3.setVisible(True)
+      
+      # initialize vertical sliders
+      if slider_number <= self.num_of_sliders:
+        slider.valueChanged.connect(lambda value, slider_number=slider_number-1: controls.update_plot(self, slider_number, value))
+        slider.setVisible(True)
+        label1.setVisible(True)
+        label2.setVisible(True)
+        label3.setVisible(True)
 
-      if slider_number <= self.sliders_dict[self.current_mode]:
-        if self.current_mode == "Uniform Range Mode":
-          label3.setText(f"{self.uniform_freq_ranges[slider_number-1][0]}-{self.uniform_freq_ranges[slider_number-1][1]}")
-        elif self.current_mode == "Musical Instruments Mode":
-          label3.setText(f"{self.music_freq_ranges[slider_number-1][0]}-{self.music_freq_ranges[slider_number-1][1]}")
-        elif self.current_mode == "Animals Sound Mode":
-          label3.setText(f"{self.animal_freq_ranges[slider_number-1][0]}-{self.animal_freq_ranges[slider_number-1][1]}")
-        else: # ECG Mode
-          label3.setText(f"{self.arrythmia_freq_ranges[slider_number-1][0]}-{self.arrythmia_freq_ranges[slider_number-1][1]}")
+        if slider_number <= self.sliders_dict[self.current_mode]:
+          if self.current_mode == "Uniform Range Mode":
+            label3.setText(f"{self.uniform_freq_ranges[slider_number-1][0]}-{self.uniform_freq_ranges[slider_number-1][1]}")
+          elif self.current_mode == "Musical Instruments Mode":
+            label3.setText(f"{self.music_freq_ranges[slider_number-1][0]}-{self.music_freq_ranges[slider_number-1][1]}")
+          elif self.current_mode == "Animals Sound Mode":
+            label3.setText(f"{self.animal_freq_ranges[slider_number-1][0]}-{self.animal_freq_ranges[slider_number-1][1]}")
+          else: # ECG Mode
+            label3.setText(f"{self.arrythmia_freq_ranges[slider_number-1][0]}-{self.arrythmia_freq_ranges[slider_number-1][1]}")
 
-    # hiding unused sliders
-    print("self.num_of_sliders: ", self.num_of_sliders)
-    for slider_number in range(self.num_of_sliders + 1, 11):
-      slider = getattr(self.ui, f"verticalSlider_{slider_number}")
-      slider.setVisible(False)
-      label1 = getattr(self.ui, f"label_{slider_number}")
-      label2 = getattr(self.ui, f"label_{10 + slider_number}")
-      label3 = getattr(self.ui, f"label_{20 + slider_number}")
-      label1.setVisible(False)
-      label2.setVisible(False)
-      label3.setVisible(False)
+      # hiding unused sliders
+      if slider_number > self.num_of_sliders:
+        slider.setVisible(False)
+        label1.setVisible(False)
+        label2.setVisible(False)
+        label3.setVisible(False)
   
   def browse_csv(self):
     options = QFileDialog.Options()
