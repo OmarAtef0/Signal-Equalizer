@@ -96,33 +96,39 @@ class SignalEqualizer(QMainWindow):
 
     self.ui.comboBox.currentIndexChanged.connect(lambda: controls.visualize_window(self))
 
-    self.axes1, self.axes2 = None, None
-
-    self.figure1, self.figure2 = None, None
-
-    self.music_dict = [
+    self.uniform_freq_ranges = [
+      [0, 1000], 
+      [1001, 2000], 
+      [2001, 3000], 
+      [3001, 4000], 
+      [4001, 5000], 
+      [5001, 6000], 
+      [6001, 7000], 
+      [7001, 8000], 
+      [8001, 9000], 
+      [9001, 10000]
+      ]
+    
+    self.music_freq_ranges = [
       [0, 1000],
       [1001, 2000],
       [2001, 3000],
       [3001,4000]
       ]
-
-    self.uniform_freq_ranges = [
-      [0.0, 1000.0], 
-      [1001.0, 2000.0], 
-      [2001.0, 3000.0], 
-      [3001.0, 4000.0], 
-      [4001.0, 5000.0], 
-      [5001.0, 6000.0], 
-      [6001.0, 7000.0], 
-      [7001.0, 8000.0], 
-      [8001.0, 9000.0], 
-      [9001.0, 10000.0]
+    
+    self.animal_freq_ranges = [
+      [0, 1000],
+      [1001, 2000],
+      [2001, 3000],
+      [3001,4000]
       ]
     
-    self.animal_freq_ranges = []
-    
-    self.arrythmia_freq_ranges = []
+    self.arrythmia_freq_ranges = [
+      [0, 1000],
+      [1001, 2000],
+      [2001, 3000],
+      [3001,4000]
+      ]
     
     self.ui.ShowHide_1.stateChanged.connect(lambda: spectogram.toggle_spectrogram(self, self.ui.Spectrogram_1))
     self.ui.ShowHide_2.stateChanged.connect(lambda: spectogram.toggle_spectrogram(self, self.ui.Spectrogram_2))
@@ -254,19 +260,38 @@ class SignalEqualizer(QMainWindow):
 
     # Loop to initialize vertical sliders
     for slider_number in range(1, 11):
-        slider = getattr(self.ui, f"verticalSlider_{slider_number}")
-        
-        # Connect each slider's valueChanged signal to a common function
-        slider.valueChanged.connect(lambda value, slider_number=slider_number-1: controls.update_plot(self, slider_number, value))
-        
-        # Make the slider visible
-        slider.setVisible(True)
+      slider = getattr(self.ui, f"verticalSlider_{slider_number}")
+      slider.valueChanged.connect(lambda value, slider_num=slider_number-1: controls.update_plot(self, slider_num, value))
+      slider.setVisible(True)
 
-    
+      label1 = getattr(self.ui, f"label_{slider_number}")
+      label2 = getattr(self.ui, f"label_{10 + slider_number}")
+      label3 = getattr(self.ui, f"label_{20 + slider_number}")
+      label1.setVisible(True)
+      label2.setVisible(True)
+      label3.setVisible(True)
+
+      if slider_number <= self.sliders_dict[self.current_mode]:
+        if self.current_mode == "Uniform Range Mode":
+          label3.setText(f"{self.uniform_freq_ranges[slider_number-1][0]}-{self.uniform_freq_ranges[slider_number-1][1]}")
+        elif self.current_mode == "Musical Instruments Mode":
+          label3.setText(f"{self.music_freq_ranges[slider_number-1][0]}-{self.music_freq_ranges[slider_number-1][1]}")
+        elif self.current_mode == "Animals Sound Mode":
+          label3.setText(f"{self.animal_freq_ranges[slider_number-1][0]}-{self.animal_freq_ranges[slider_number-1][1]}")
+        else: # ECG Mode
+          label3.setText(f"{self.arrythmia_freq_ranges[slider_number-1][0]}-{self.arrythmia_freq_ranges[slider_number-1][1]}")
+
     # hiding unused sliders
+    print("self.num_of_sliders: ", self.num_of_sliders)
     for slider_number in range(self.num_of_sliders + 1, 11):
       slider = getattr(self.ui, f"verticalSlider_{slider_number}")
       slider.setVisible(False)
+      label1 = getattr(self.ui, f"label_{slider_number}")
+      label2 = getattr(self.ui, f"label_{10 + slider_number}")
+      label3 = getattr(self.ui, f"label_{20 + slider_number}")
+      label1.setVisible(False)
+      label2.setVisible(False)
+      label3.setVisible(False)
   
   def browse_csv(self):
     options = QFileDialog.Options()
