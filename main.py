@@ -95,6 +95,7 @@ class SignalEqualizer(QMainWindow):
     self.ui.plot_3.setLabel('bottom', 'Frequency (Hz)')
 
     self.ui.comboBox.currentIndexChanged.connect(lambda: controls.visualize_window(self))
+    self.Gaussian_std = 5
 
     self.uniform_freq_ranges = [
       [0, 1000], 
@@ -167,8 +168,8 @@ class SignalEqualizer(QMainWindow):
     self.MaxX = max(self.input_signal.time)
     self.MinX = min(self.input_signal.time)
 
-    self.MaxY = max(self.input_signal.amplitude)
-    self.MinY = min(self.input_signal.amplitude)
+    self.MaxY = max(self.input_signal.t_amplitude)
+    self.MinY = min(self.input_signal.t_amplitude)
 
   def scroll_y(self, value):
     self.find_limits()
@@ -318,18 +319,11 @@ class SignalEqualizer(QMainWindow):
         
   def open_signal(self):
     self.change_mode()
-    if self.current_mode == "Uniform Range Mode":
+    if self.current_mode == "Uniform Range Mode" or self.current_mode == "ECG Mode":
       self.browse_csv()
-
-    elif self.current_mode == "ECG Mode":
-      self.browse_csv()
-    
-    elif self.current_mode == "Musical Instruments Mode":
+    else:
       audio.browse_audio(self)
-
-    elif self.current_mode == "Animals Sound Mode":
-      audio.browse_audio(self)
-    
+      
     # first time to make fourier
     if len(self.input_signal.frequency) == 0:
       fourier.fourier_transfrom(self, self.input_signal.time, self.input_signal.t_amplitude)  
