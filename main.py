@@ -112,7 +112,7 @@ class SignalEqualizer(QMainWindow):
     
     self.music_freq_ranges = [
       [0, 1000],
-      [1001, 2000],
+      [100, 2000],
       [2001, 3000],
       [3001,4000]
       ]
@@ -262,7 +262,11 @@ class SignalEqualizer(QMainWindow):
     # Loop to initialize vertical sliders
     for slider_number in range(1, 11):
       slider = getattr(self.ui, f"verticalSlider_{slider_number}")
-      slider.valueChanged.connect(lambda value, slider_num=slider_number-1: controls.update_plot(self, slider_num, value))
+      
+      # Connect each slider's valueChanged signal to a common function
+      slider.valueChanged.connect(lambda value, slider_number=slider_number-1: controls.update_plot(self, slider_number, value))
+      
+      # Make the slider visible
       slider.setVisible(True)
 
       label1 = getattr(self.ui, f"label_{slider_number}")

@@ -12,8 +12,8 @@ def update_plot(self, index, value):
     update_frequency_range(self, self.uniform_freq_ranges[index], 10**(value))
   
   elif self.current_mode == "Musical Instruments Mode":
-    print("music range: ", self.music_dict[index])
-    update_frequency_range(self , self.music_dict[index], 10**(value))
+    print("music range: ", self.music_freq_ranges[index])
+    update_frequency_range(self , self.music_freq_ranges[index], 10**(value))
 
   elif self.current_mode == "Animals Sound Mode":
     update_frequency_range(self , self.animal_dict[index], 10**(value))
