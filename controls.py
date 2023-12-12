@@ -4,9 +4,6 @@ from scipy.signal.windows import boxcar, hamming, hann, gaussian
 from PyQt5.QtWidgets import *
 
 def update_plot(self, index, value):
-  # print("index: ",index)
-  # print("value: ", (value))
-  
   if self.current_mode == "Uniform Range Mode":
     print(self.uniform_freq_ranges[index])
     update_frequency_range(self, self.uniform_freq_ranges[index], 10**(value))
@@ -35,29 +32,11 @@ def update_frequency_range(self, target_frequency_range, value):
   window_type = self.ui.comboBox.currentText()
   window_function = create_window_function(self, window_type, len(self.target_indices))
   window_function *= value
-  # print("window_function: ",window_function)
-
-  # print("Before")
-  # for target_i in self.target_indices[:5]:
-  #   print(self.output_signal.f_amplitude[target_i])
-
-  # print()
 
   for index, target_i in enumerate(self.target_indices):
     if target_i >= 0 and target_i < len(self.output_signal.f_amplitude): 
       self.output_signal.f_amplitude[target_i] = self.original_signal_f_amplitude[target_i] * window_function[index]
-  
-  # print("After")
-  # for target_i in self.target_indices[:5]:
-  #   print(self.output_signal.f_amplitude[target_i])
-
-  # error = 0
-  # for i,value in enumerate(self.output_signal.f_amplitude):
-  #    error = error + abs(self.output_signal.f_amplitude[i] - self.original_signal_f_amplitude[i])
-
-  # print("error: ",error)
      
-      
 def visualize_window(self):
     # Get window type from the UI
     window_type = self.ui.comboBox.currentText()

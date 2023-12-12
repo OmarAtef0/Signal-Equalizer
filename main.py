@@ -224,6 +224,10 @@ class SignalEqualizer(QMainWindow):
     self.ui.plot_3.clear()
     self.ui.plot_5.clear()
 
+    for slider_number in range(1, 11):
+      slider = getattr(self.ui, f"verticalSlider_{slider_number}")
+      slider.setValue(0)
+
     #clear input and output
     self.browsed_signal = SampledSignal()
     self.input_signal = Signal()
@@ -314,7 +318,6 @@ class SignalEqualizer(QMainWindow):
       self.draw()
       controls.visualize_window(self)
       
-
 if __name__ == "__main__":
   app = QApplication(sys.argv)
   window = SignalEqualizer()
