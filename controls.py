@@ -4,9 +4,6 @@ from scipy.signal.windows import boxcar, hamming, hann, gaussian
 from PyQt5.QtWidgets import *
 
 def update_plot(self, index, value):
-  # print("index: ",index)
-  # print("value: ", (value))
-  
   if self.current_mode == "Uniform Range Mode":
     print(self.uniform_freq_ranges[index])
     update_frequency_range(self, self.uniform_freq_ranges[index], 10**(value))
@@ -18,45 +15,24 @@ def update_plot(self, index, value):
   elif self.current_mode == "Animals Sound Mode":
     update_frequency_range(self , self.animal_freq_ranges[index], 10**(value))
 
-  # make dict to map slider index to its frequency range
   elif self.current_mode == "ECG Mode":
-    update_frequency_range(self , [0,1000], 10**(value))
+    update_frequency_range(self , self.arrythmia_freq_ranges[index], value)
   
-  # Apply IFFT to get the modified time-domain signal
   fourier.inverse_fourier(self)
 
 def update_frequency_range(self, target_frequency_range, value):
-  # Identify the indices corresponding to the target frequency range
   self.target_indices = []
   for i, frequency in enumerate(self.output_signal.frequency):
-    if target_frequency_range[0] <= frequency <= target_frequency_range[1]:
+    if target_frequency_range[0] < frequency <= target_frequency_range[1]:
       self.target_indices.append(i)
 
   window_type = self.ui.comboBox.currentText()
   window_function = create_window_function(self, window_type, len(self.target_indices))
   window_function *= value
-  # print("window_function: ",window_function)
-
-  # print("Before")
-  # for target_i in self.target_indices[:5]:
-  #   print(self.output_signal.f_amplitude[target_i])
-
-  # print()
 
   for index, target_i in enumerate(self.target_indices):
     if target_i >= 0 and target_i < len(self.output_signal.f_amplitude): 
       self.output_signal.f_amplitude[target_i] = self.original_signal_f_amplitude[target_i] * window_function[index]
-  
-  # print("After")
-  # for target_i in self.target_indices[:5]:
-  #   print(self.output_signal.f_amplitude[target_i])
-
-  # error = 0
-  # for i,value in enumerate(self.output_signal.f_amplitude):
-  #    error = error + abs(self.output_signal.f_amplitude[i] - self.original_signal_f_amplitude[i])
-
-  # print("error: ",error)
-     
       
 def visualize_window(self):
     # Get window type from the UI

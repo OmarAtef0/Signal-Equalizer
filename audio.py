@@ -68,27 +68,11 @@ def play_audio(self, audio_file):
 
 def _play_audio(self):
   if self.generated_audio_file:
-    # amplitude_array = list(self.output_signal.t_amplitude)
-
-    # # Normalize the amplitude array to be in the range [-1, 1]
-    # amplitude_array = np.array(amplitude_array)
-    # amplitude_array = amplitude_array / np.max(np.abs(amplitude_array))
-
-    # # Play the audio using sounddevice
-    # sd.play(amplitude_array, self.output_signal.sample_rate)
-    
-    # # time.sleep(10)
-    # # sd.stop()
-    # self.ui.play_pause_btn.setText("Play")
-    # # sd.wait()  # Wait for the audio to finish playing
-
     pygame.mixer.music.load(f'dataset/outputs/output_{self.output_num - 1}.wav')
     pygame.mixer.music.play()
   else:
     pygame.mixer.music.load(self.audio_file)
     pygame.mixer.music.play()
-    
-  
 
 def pause_audio(self):
   pygame.mixer.music.pause()
