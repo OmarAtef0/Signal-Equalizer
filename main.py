@@ -148,13 +148,6 @@ class SignalEqualizer(QMainWindow):
   def draw_spectrograms(self):
     spectogram.CreateSpectrogram(self.axes1, self.figure1, self.ui.Spectrogram_1, self.input_signal.t_amplitude, self.input_signal.time)
     spectogram.CreateSpectrogram(self.axes2, self.figure2, self.ui.Spectrogram_2, self.output_signal.t_amplitude, self.output_signal.time)
-
-  def set_limtis(self):
-    self.ui.plot_1.plotItem.getViewBox().setLimits(xMin=0, xMax=self.MaxX*1.2)
-    self.ui.plot_1.plotItem.getViewBox().setLimits(yMin=self.MinY, xMax=self.MaxY*1.2)
-    # self.ui.plot_1.plotItem.getViewBox().setLimits(yMin=self.MinY, xMax=self.MaxY*1.2)
-    # self.ui.plot_1.plotItem.getViewBox().setLimits(yMin=self.MinY, xMax=self.MaxY*1.2)
-    # self.ui.plot_3.plotItem.getViewBox().setLimits(yMin=0, yMax=max(self.output_signal.f_amplitude)*1.2)
   
   def draw(self):
     self.ui.plot_1.clear()
@@ -205,8 +198,8 @@ class SignalEqualizer(QMainWindow):
     self.ui.plot_2.setXRange(self.x_range[0], self.x_range[1])
 
   def reset_plots(self):
-    if self.ui.play_pause_btn.text() == "Pause" and self.current_mode == "Musical Instruments Mode" or self.current_mode == "Animals Sound Mode":
-      audio._play_audio(self)
+    # if self.ui.play_pause_btn.text() == "Pause" and self.current_mode == "Musical Instruments Mode" or self.current_mode == "Animals Sound Mode":
+    #   audio._play_audio(self)
 
     self.x_range = [0.0, 1.0]
     self.ui.verticalScrollBar_1.setValue(0)
@@ -246,9 +239,9 @@ class SignalEqualizer(QMainWindow):
     self.ui.plot_3.clear()
     self.ui.plot_5.clear()
 
-    for slider_number in range(1, 11):
-      slider = getattr(self.ui, f"verticalSlider_{slider_number}")
-      slider.setValue(0)
+    # for slider_number in range(1, 11):
+    #   slider = getattr(self.ui, f"verticalSlider_{slider_number}")
+    #   slider.setValue(0)
 
     #clear input and output
     self.browsed_signal = SampledSignal()

@@ -19,7 +19,7 @@ def browse_audio(self):
 
   if file_name:
     self.audio_file = file_name
-    audio_data(self, file_name)
+    audio_data(self, self.audio_file)
     self.started = False 
 
 def audio_data(self, filename):
@@ -44,6 +44,7 @@ def audio_data(self, filename):
 def play_audio(self, audio_file):
   if self.current_mode != "Musical Instruments Mode" and self.current_mode != "Animals Sound Mode":
      return
+  
   if self.generated_audio_file:
     _play_audio(self)
     if self.playing:
