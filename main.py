@@ -65,10 +65,11 @@ class SignalEqualizer(QMainWindow):
     self.ui.reset_btn.clicked.connect(self.reset_plots)
 
     # x ranges
-    self.x_range = [0.0, 10.0]
+    self.x_range = [0.0, 1.0]
 
     # speed
-    self.x_range_speed = 0.1
+    self.x_range_speed = 0.01
+    self.ui.speed_slider.valueChanged.connect(self.update_playback_speed)
 
     # timer
     self.timer = QTimer(self)
@@ -100,12 +101,26 @@ class SignalEqualizer(QMainWindow):
     self.axes1, self.figure1 = None, None
     self.axes2, self.figure2 = None, None
 
+    self.uniform_freq_ranges =[
+      [0,1000],
+      [1000, 2000],
+      [2000, 3000],
+      [3000, 4000],
+      [4000, 5000],
+      [5000, 6000],
+      [6000, 7000],
+      [7000, 8000],
+      [8000, 9000],
+      [9000, 10000],
+    ]
     self.music_freq_ranges = [
       [0, 1000], #Drums
       [0, 2000], #Guitar
       [1000, 2000], #Violen
       [2000, 20000] #saxephone
       ]
+    
+    self.music_names = ["Drums", "Guitar" , "Violen" ,"Saxophone"]
 
     self.animal_freq_ranges = [
       [0, 1500], #cows
@@ -113,9 +128,11 @@ class SignalEqualizer(QMainWindow):
       [500, 4000], #elephant
       [4000, 10000] #birds
       ]
+    
+    self.animal_names = [ "Cow", "Sheep", "Elephant", "Bird" ]
 
     self.arrythmia_freq_ranges = [
-      [0, 12],
+      [0, 12.5],
       [10, 20],
       [38, 96],
       [150, 250]
@@ -132,6 +149,13 @@ class SignalEqualizer(QMainWindow):
     spectogram.CreateSpectrogram(self.axes1, self.figure1, self.ui.Spectrogram_1, self.input_signal.t_amplitude, self.input_signal.time)
     spectogram.CreateSpectrogram(self.axes2, self.figure2, self.ui.Spectrogram_2, self.output_signal.t_amplitude, self.output_signal.time)
 
+  def set_limtis(self):
+    self.ui.plot_1.plotItem.getViewBox().setLimits(xMin=0, xMax=self.MaxX*1.2)
+    self.ui.plot_1.plotItem.getViewBox().setLimits(yMin=self.MinY, xMax=self.MaxY*1.2)
+    # self.ui.plot_1.plotItem.getViewBox().setLimits(yMin=self.MinY, xMax=self.MaxY*1.2)
+    # self.ui.plot_1.plotItem.getViewBox().setLimits(yMin=self.MinY, xMax=self.MaxY*1.2)
+    # self.ui.plot_3.plotItem.getViewBox().setLimits(yMin=0, yMax=max(self.output_signal.f_amplitude)*1.2)
+  
   def draw(self):
     self.ui.plot_1.clear()
     self.ui.plot_2.clear()
@@ -139,6 +163,8 @@ class SignalEqualizer(QMainWindow):
 
     y_range = (0, max(self.original_signal_f_amplitude)*1.2)
     self.ui.plot_3.setYRange(*y_range)
+
+    # self.ui.plot_3.plotItem.getViewBox().setLimits(yMin=0, yMax=max(self.output_signal.f_amplitude)*1.2)
 
     self.ui.plot_1.plot(self.input_signal.time, self.input_signal.t_amplitude)
     self.ui.plot_2.plot(self.output_signal.time, self.output_signal.t_amplitude)
@@ -182,20 +208,16 @@ class SignalEqualizer(QMainWindow):
     if self.ui.play_pause_btn.text() == "Pause" and self.current_mode == "Musical Instruments Mode" or self.current_mode == "Animals Sound Mode":
       audio._play_audio(self)
 
-    self.x_range = [0.0, 10.0]
+    self.x_range = [0.0, 1.0]
     self.ui.verticalScrollBar_1.setValue(0)
     self.ui.horizontalScrollBar_1.setValue(0)
     self.ui.verticalScrollBar_2.setValue(0)
     self.ui.horizontalScrollBar_2.setValue(0)
     self.ui.speed_slider.setValue(4)
+    self.x_range_speed = 0.01
     
     self.ui.plot_1.setXRange(self.x_range[0], self.x_range[1])
     self.ui.plot_2.setXRange(self.x_range[0], self.x_range[1])
-
-    self.x_range_speed_1 = 0.08
-    self.x_range_speed_2 = 0.08
-
-    self.update_playback_speed(self.ui.speed_slider.value())
 
   def update_plots(self):
     # if not self.playing:
@@ -215,7 +237,7 @@ class SignalEqualizer(QMainWindow):
     self.ui.plot_2.plotItem.getViewBox().scaleBy((1.25, 1.25))  
 
   def update_playback_speed(self, value):
-    self.x_range_speed = (value / 100.0) + 0.12
+    self.x_range_speed = (value / 100.0) + 0.10
 
   def clear(self):
     #clear plots
@@ -269,12 +291,15 @@ class SignalEqualizer(QMainWindow):
           if self.current_mode == "Uniform Range Mode":
             label3.setText(f"{self.uniform_freq_ranges[slider_number-1][0]}-{self.uniform_freq_ranges[slider_number-1][1]}")
           elif self.current_mode == "Musical Instruments Mode":
-            label3.setText(f"{self.music_freq_ranges[slider_number-1][0]}-{self.music_freq_ranges[slider_number-1][1]}")
+            label3.setText(f"{self.music_names[slider_number-1]}")
           elif self.current_mode == "Animals Sound Mode":
-            label3.setText(f"{self.animal_freq_ranges[slider_number-1][0]}-{self.animal_freq_ranges[slider_number-1][1]}")
+            label3.setText(f"{self.animal_names[slider_number-1]}")
           else: # ECG Mode
-            label3.setText(f"{self.arrythmia_freq_ranges[slider_number-1][0]}-{self.arrythmia_freq_ranges[slider_number-1][1]}")
-
+            if slider_number < 4:
+              label3.setText(f"Arrthymia_{slider_number}")
+            else:
+              label3.setText(f"Normal ECG")
+            
       # hiding unused sliders
       if slider_number > self.num_of_sliders:
         slider.setVisible(False)

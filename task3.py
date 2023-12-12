@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1069, 804)
+        MainWindow.resize(1069, 861)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -255,6 +255,7 @@ class Ui_MainWindow(object):
         self.play_pause_btn.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
         font.setBold(True)
+        font.setWeight(75)
         self.play_pause_btn.setFont(font)
         self.play_pause_btn.setStyleSheet("\n"
 "\n"
@@ -363,46 +364,12 @@ class Ui_MainWindow(object):
         self.groupBox_3.setObjectName("groupBox_3")
         self.gridLayout_11 = QtWidgets.QGridLayout(self.groupBox_3)
         self.gridLayout_11.setObjectName("gridLayout_11")
-        self.horizontalScrollBar_3 = QtWidgets.QScrollBar(self.groupBox_3)
-        self.horizontalScrollBar_3.setMaximumSize(QtCore.QSize(16777215, 5))
-        self.horizontalScrollBar_3.setStyleSheet("QScrollBar:horizontal {\n"
-"    background-color: rgb(255, 255, 255);\n"
-"}\n"
-"\n"
-"QScrollBar::handle:horizontal {\n"
-" background-color: #676767;\n"
-"}\n"
-"")
-        self.horizontalScrollBar_3.setOrientation(QtCore.Qt.Horizontal)
-        self.horizontalScrollBar_3.setInvertedAppearance(False)
-        self.horizontalScrollBar_3.setInvertedControls(True)
-        self.horizontalScrollBar_3.setObjectName("horizontalScrollBar_3")
-        self.gridLayout_11.addWidget(self.horizontalScrollBar_3, 1, 1, 1, 1)
-        self.verticalScrollBar_3 = QtWidgets.QScrollBar(self.groupBox_3)
-        self.verticalScrollBar_3.setMaximumSize(QtCore.QSize(5, 16777215))
-        self.verticalScrollBar_3.setStyleSheet("QScrollBar:vertical {\n"
-"    background-color: rgb(255, 255, 255);\n"
-"}\n"
-"\n"
-"QScrollBar::handle:vertical\n"
-" {\n"
-" background-color: #676767;\n"
-"}\n"
-"\n"
-"\n"
-"")
-        self.verticalScrollBar_3.setMinimum(-80)
-        self.verticalScrollBar_3.setMaximum(80)
-        self.verticalScrollBar_3.setProperty("value", 0)
-        self.verticalScrollBar_3.setOrientation(QtCore.Qt.Vertical)
-        self.verticalScrollBar_3.setObjectName("verticalScrollBar_3")
-        self.gridLayout_11.addWidget(self.verticalScrollBar_3, 0, 0, 1, 1)
         self.plot_3 = PlotWidget(self.groupBox_3)
         self.plot_3.setMinimumSize(QtCore.QSize(0, 0))
         self.plot_3.setAutoFillBackground(False)
         self.plot_3.setStyleSheet("background-color: rgb(0, 0, 0);")
         self.plot_3.setObjectName("plot_3")
-        self.gridLayout_11.addWidget(self.plot_3, 0, 1, 1, 1)
+        self.gridLayout_11.addWidget(self.plot_3, 0, 0, 1, 1)
         self.horizontalLayout_4.addWidget(self.groupBox_3)
         self.smoothing_box = QtWidgets.QGroupBox(self.frequency_output)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -1304,13 +1271,3 @@ class Ui_MainWindow(object):
         self.actionPlay_Input_2.setText(_translate("MainWindow", "Play Input"))
         self.actionPlay_Output_2.setText(_translate("MainWindow", "Play Output"))
 from pyqtgraph import PlotWidget
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())

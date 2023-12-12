@@ -64,9 +64,9 @@ The Signal Equalizer is a versatile desktop application designed for manipulatin
 
 ## Team Members
 
-- Ibrahim Emad
 - Omar Atef
 - Hazem Rafaat
+- Ibrahim Emad
 - Ahmed Khaled
 
 

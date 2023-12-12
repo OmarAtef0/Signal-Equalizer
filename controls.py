@@ -15,18 +15,15 @@ def update_plot(self, index, value):
   elif self.current_mode == "Animals Sound Mode":
     update_frequency_range(self , self.animal_freq_ranges[index], 10**(value))
 
-  # make dict to map slider index to its frequency range
   elif self.current_mode == "ECG Mode":
-    update_frequency_range(self , [0,1000], 10**(value))
+    update_frequency_range(self , self.arrythmia_freq_ranges[index], value)
   
-  # Apply IFFT to get the modified time-domain signal
   fourier.inverse_fourier(self)
 
 def update_frequency_range(self, target_frequency_range, value):
-  # Identify the indices corresponding to the target frequency range
   self.target_indices = []
   for i, frequency in enumerate(self.output_signal.frequency):
-    if target_frequency_range[0] <= frequency <= target_frequency_range[1]:
+    if target_frequency_range[0] < frequency <= target_frequency_range[1]:
       self.target_indices.append(i)
 
   window_type = self.ui.comboBox.currentText()
