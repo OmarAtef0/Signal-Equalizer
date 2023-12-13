@@ -114,22 +114,20 @@ class SignalEqualizer(QMainWindow):
       [9000, 10000],
     ]
     self.music_freq_ranges = [
-      [0, 1000], #Drums
-      [0, 2000], #Guitar
-      [1000, 2000], #Violen
-      [2000, 20000] #saxephone
+      [0, 800], #sax
+      [801, 1700], #clarinet
+      [1701, 3000], #accordion2
+      [3001, 25000] #drums
       ]
-    
-    self.music_names = ["Drums", "Guitar" , "Violen" ,"Saxophone"]
+    self.music_names = ["sax", "clarinet" , "accordion" ,"drums"]
 
     self.animal_freq_ranges = [
-      [0, 1500], #cows
-      [1500, 4000], #sheep
-      [500, 4000], #elephant
-      [4000, 10000] #birds
+      [0, 1000], #dog
+      [1001, 1800], #cow
+      [1801, 4000], #cat
+      [4001, 24000] #bird
       ]
-    
-    self.animal_names = [ "Cow", "Sheep", "Elephant", "Bird" ]
+    self.animal_names = [ "dog", "cow", "cat", "bird" ]
 
     self.arrythmia_freq_ranges = [
       [0, 12.5],

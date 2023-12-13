@@ -1,0 +1,14 @@
+accordion 0 24000
+accordion2 0 12000
+clarinet 0 12000
+flute 0 24000
+guitar 0 24000
+saxophone 0 24000
+
+sax 0 800
+clarinet 800 1700
+accordion2 1700 3000
+drums 3000 25000
+
+reset sliders to 0
+

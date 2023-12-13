@@ -42,14 +42,6 @@ def inverse_fourier(self):
   print(fft_complex_amplitudes)
   self.output_signal.time = self.input_signal.time  
   self.output_signal.t_amplitude = np.real(fft_complex_amplitudes)
-
-  # print("time amp before inverse ",self.output_signal.t_amplitude[0:5])
-  # print("time amp after inverse: ",self.output_signal.t_amplitude[0:5])
-  print("time_len_in", len(self.input_signal.time))
-  print("amp_len_in", len(self.input_signal.t_amplitude))
-  
-  print("time_len_out", len(self.output_signal.time))
-  print("amp_len_out", len(self.output_signal.t_amplitude))
   
   self.draw()
   

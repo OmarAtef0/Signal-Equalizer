@@ -19,7 +19,7 @@ def browse_audio(self):
 
   if file_name:
     self.audio_file = file_name
-    audio_data(self, self.audio_file)
+    audio_data(self, file_name)
     self.started = False 
 
 def audio_data(self, filename):

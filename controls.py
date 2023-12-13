@@ -2,6 +2,7 @@ import numpy as np
 import fourier
 from scipy.signal.windows import boxcar, hamming, hann, gaussian
 from PyQt5.QtWidgets import *
+import audio
 
 def update_plot(self, index, value):
   if self.current_mode == "Uniform Range Mode":
@@ -10,6 +11,7 @@ def update_plot(self, index, value):
   
   elif self.current_mode == "Musical Instruments Mode":
     print("music range: ", self.music_freq_ranges[index])
+    # audio.audio_data(self, "dataset/Music/CocktailMusic2.wav")
     update_frequency_range(self , self.music_freq_ranges[index], 10**(value))
 
   elif self.current_mode == "Animals Sound Mode":
@@ -17,7 +19,7 @@ def update_plot(self, index, value):
 
   elif self.current_mode == "ECG Mode":
     update_frequency_range(self , self.arrythmia_freq_ranges[index], value)
-  
+    
   fourier.inverse_fourier(self)
 
 def update_frequency_range(self, target_frequency_range, value):
@@ -28,6 +30,8 @@ def update_frequency_range(self, target_frequency_range, value):
 
   window_type = self.ui.comboBox.currentText()
   window_function = create_window_function(self, window_type, len(self.target_indices))
+  if value > 1:
+     value /= 2
   window_function *= value
 
   for index, target_i in enumerate(self.target_indices):
@@ -55,8 +59,8 @@ def create_window_function(self, window_type, length):
     elif window_type == "Hanning":
         window_function = hann(length)
     elif window_type == "Gaussian":
-        # Adjust window_params as needed
-        window_function = gaussian(length, std=self.Gaussian_std)
+      # Adjust window_params as needed
+      window_function = gaussian(length, std=self.Gaussian_std)
     else:
         raise ValueError("Invalid window type")
 

@@ -255,7 +255,6 @@ class Ui_MainWindow(object):
         self.play_pause_btn.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
         font.setBold(True)
-        font.setWeight(75)
         self.play_pause_btn.setFont(font)
         self.play_pause_btn.setStyleSheet("\n"
 "\n"
@@ -577,7 +576,7 @@ class Ui_MainWindow(object):
 "        radius: 1, stop: 0 #bbb, stop: 1 #000\n"
 "        );\n"
 "}")
-        self.verticalSlider_1.setMinimum(-3)
+        self.verticalSlider_1.setMinimum(-5)
         self.verticalSlider_1.setMaximum(3)
         self.verticalSlider_1.setSingleStep(1)
         self.verticalSlider_1.setPageStep(1)
@@ -610,7 +609,7 @@ class Ui_MainWindow(object):
 "        radius: 1, stop: 0 #bbb, stop: 1 #000\n"
 "        );\n"
 "}")
-        self.verticalSlider_2.setMinimum(-3)
+        self.verticalSlider_2.setMinimum(-5)
         self.verticalSlider_2.setMaximum(3)
         self.verticalSlider_2.setSingleStep(1)
         self.verticalSlider_2.setPageStep(1)
@@ -643,7 +642,7 @@ class Ui_MainWindow(object):
 "        radius: 1, stop: 0 #bbb, stop: 1 #000\n"
 "        );\n"
 "}")
-        self.verticalSlider_3.setMinimum(-3)
+        self.verticalSlider_3.setMinimum(-5)
         self.verticalSlider_3.setMaximum(3)
         self.verticalSlider_3.setSingleStep(1)
         self.verticalSlider_3.setPageStep(1)
@@ -676,7 +675,7 @@ class Ui_MainWindow(object):
 "        radius: 1, stop: 0 #bbb, stop: 1 #000\n"
 "        );\n"
 "}")
-        self.verticalSlider_4.setMinimum(-3)
+        self.verticalSlider_4.setMinimum(-5)
         self.verticalSlider_4.setMaximum(3)
         self.verticalSlider_4.setPageStep(1)
         self.verticalSlider_4.setProperty("value", 0)
@@ -708,7 +707,7 @@ class Ui_MainWindow(object):
 "        radius: 1, stop: 0 #bbb, stop: 1 #000\n"
 "        );\n"
 "}")
-        self.verticalSlider_5.setMinimum(-3)
+        self.verticalSlider_5.setMinimum(-5)
         self.verticalSlider_5.setMaximum(3)
         self.verticalSlider_5.setPageStep(1)
         self.verticalSlider_5.setProperty("value", 0)
@@ -740,7 +739,7 @@ class Ui_MainWindow(object):
 "        radius: 1, stop: 0 #bbb, stop: 1 #000\n"
 "        );\n"
 "}")
-        self.verticalSlider_6.setMinimum(-3)
+        self.verticalSlider_6.setMinimum(-5)
         self.verticalSlider_6.setMaximum(3)
         self.verticalSlider_6.setPageStep(1)
         self.verticalSlider_6.setProperty("value", 0)
@@ -772,7 +771,7 @@ class Ui_MainWindow(object):
 "        radius: 1, stop: 0 #bbb, stop: 1 #000\n"
 "        );\n"
 "}")
-        self.verticalSlider_7.setMinimum(-3)
+        self.verticalSlider_7.setMinimum(-5)
         self.verticalSlider_7.setMaximum(3)
         self.verticalSlider_7.setPageStep(1)
         self.verticalSlider_7.setProperty("value", 0)
@@ -804,7 +803,7 @@ class Ui_MainWindow(object):
 "        radius: 1, stop: 0 #bbb, stop: 1 #000\n"
 "        );\n"
 "}")
-        self.verticalSlider_8.setMinimum(-3)
+        self.verticalSlider_8.setMinimum(-5)
         self.verticalSlider_8.setMaximum(3)
         self.verticalSlider_8.setPageStep(1)
         self.verticalSlider_8.setProperty("value", 0)
@@ -836,7 +835,7 @@ class Ui_MainWindow(object):
 "        radius: 1, stop: 0 #bbb, stop: 1 #000\n"
 "        );\n"
 "}")
-        self.verticalSlider_9.setMinimum(-3)
+        self.verticalSlider_9.setMinimum(-5)
         self.verticalSlider_9.setMaximum(3)
         self.verticalSlider_9.setPageStep(1)
         self.verticalSlider_9.setProperty("value", 0)
@@ -868,7 +867,7 @@ class Ui_MainWindow(object):
 "        radius: 1, stop: 0 #bbb, stop: 1 #000\n"
 "        );\n"
 "}")
-        self.verticalSlider_10.setMinimum(-3)
+        self.verticalSlider_10.setMinimum(-5)
         self.verticalSlider_10.setMaximum(3)
         self.verticalSlider_10.setPageStep(1)
         self.verticalSlider_10.setProperty("value", 0)
@@ -1271,3 +1270,13 @@ class Ui_MainWindow(object):
         self.actionPlay_Input_2.setText(_translate("MainWindow", "Play Input"))
         self.actionPlay_Output_2.setText(_translate("MainWindow", "Play Output"))
 from pyqtgraph import PlotWidget
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
