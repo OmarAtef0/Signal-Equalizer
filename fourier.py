@@ -1,6 +1,7 @@
 import numpy as np
 from scipy import fft 
 import audio
+import controls
 
 def set_signal_attributes(self, signal, frequencies, fourier_coefficients):
   signal.frequency = frequencies
@@ -39,10 +40,15 @@ def inverse_fourier(self):
   if self.current_mode == "Musical Instruments Mode" or self.current_mode == "Animals Sound Mode":
    audio.save_as_wav(self, self.output_signal.t_amplitude)   
   
-  print(fft_complex_amplitudes)
-  self.output_signal.time = self.input_signal.time  
+  self.output_signal.time = list(self.input_signal.time)  
   self.output_signal.t_amplitude = np.real(fft_complex_amplitudes)
-  
+
+  if len(self.output_signal.t_amplitude) < len(self.input_signal.t_amplitude):
+    self.output_signal.t_amplitude = np.append(self.output_signal.t_amplitude, 0)
+
+  self.output_signal.t_amplitude = controls.moving_average(self.output_signal.t_amplitude, self.ecg_value)
+  print(self.ecg_value)
+  self.ecg_value += 1
   self.draw()
   
 

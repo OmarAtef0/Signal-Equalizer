@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QIcon
 from task3 import Ui_MainWindow
+import pyqtgraph as pg
 from classes import *
 import pygame
 
@@ -65,10 +66,10 @@ class SignalEqualizer(QMainWindow):
     self.ui.reset_btn.clicked.connect(self.reset_plots)
 
     # x ranges
-    self.x_range = [0.0, 1.0]
+    self.x_range = [0.0, 4.0]
 
     # speed
-    self.x_range_speed = 0.01
+    self.x_range_speed = 0.05
     self.ui.speed_slider.valueChanged.connect(self.update_playback_speed)
 
     # timer
@@ -93,6 +94,7 @@ class SignalEqualizer(QMainWindow):
     self.ui.plot_2.setLabel('bottom', 'Time (s)')
     self.ui.plot_3.setLabel('left', 'Amplitude')
     self.ui.plot_3.setLabel('bottom', 'Frequency (Hz)')
+    self.ecg_value = 5
 
     self.ui.comboBox.currentIndexChanged.connect(lambda: controls.visualize_window(self))
     self.Gaussian_std = 5
@@ -130,10 +132,10 @@ class SignalEqualizer(QMainWindow):
     self.animal_names = [ "dog", "cow", "cat", "bird" ]
 
     self.arrythmia_freq_ranges = [
-      [0, 12.5],
-      [10, 20],
-      [38, 96],
-      [150, 250]
+      [20, 50],  #arrythmia_1
+      [20, 50],  #arrythmia_2
+      [20, 50],  #arrythmia_3
+      [20, 50]   #normal
       ]
     
     self.ui.ShowHide_1.stateChanged.connect(lambda: spectogram.toggle_spectrogram(self, self.ui.Spectrogram_1))
@@ -152,15 +154,14 @@ class SignalEqualizer(QMainWindow):
     self.ui.plot_2.clear()
     self.ui.plot_3.clear()
 
-    y_range = (0, max(self.original_signal_f_amplitude)*1.2)
-    self.ui.plot_3.setYRange(*y_range)
-
-    # self.ui.plot_3.plotItem.getViewBox().setLimits(yMin=0, yMax=max(self.output_signal.f_amplitude)*1.2)
-
     self.ui.plot_1.plot(self.input_signal.time, self.input_signal.t_amplitude)
     self.ui.plot_2.plot(self.output_signal.time, self.output_signal.t_amplitude)
     self.ui.plot_3.plot(self.output_signal.frequency, self.output_signal.f_amplitude)
-    self.ui.plot_3.showGrid(True, True)
+
+    self.ui.plot_1.plotItem.enableAutoRange(pg.ViewBox.YAxis, enable=False)
+    self.ui.plot_2.plotItem.enableAutoRange(pg.ViewBox.YAxis, enable=False)
+    self.ui.plot_3.plotItem.enableAutoRange(pg.ViewBox.YAxis, enable=False)
+    
     self.draw_spectrograms()
 
   def toggle_playback(self):
@@ -199,13 +200,13 @@ class SignalEqualizer(QMainWindow):
     # if self.ui.play_pause_btn.text() == "Pause" and self.current_mode == "Musical Instruments Mode" or self.current_mode == "Animals Sound Mode":
     #   audio._play_audio(self)
 
-    self.x_range = [0.0, 1.0]
+    self.x_range = [0.0, 4.0]
     self.ui.verticalScrollBar_1.setValue(0)
     self.ui.horizontalScrollBar_1.setValue(0)
     self.ui.verticalScrollBar_2.setValue(0)
     self.ui.horizontalScrollBar_2.setValue(0)
     self.ui.speed_slider.setValue(4)
-    self.x_range_speed = 0.01
+    self.x_range_speed = 0.04
     
     self.ui.plot_1.setXRange(self.x_range[0], self.x_range[1])
     self.ui.plot_2.setXRange(self.x_range[0], self.x_range[1])
@@ -261,6 +262,7 @@ class SignalEqualizer(QMainWindow):
           action.setChecked(False)
     
     print("current mode: ",self.current_mode)
+    self.ui.mode_title.setText(self.current_mode)
 
     self.num_of_sliders = self.sliders_dict[self.current_mode]
 
@@ -313,7 +315,7 @@ class SignalEqualizer(QMainWindow):
             # neglect the first line in the csv file
             next(csvReader)
             for line in csvReader:
-                amplitude.append(float(line[1]))
+                amplitude.append(-float(line[1]))
                 time.append(float(line[0]))
 
         self.fsample = 1 / (time[1] - time[0])

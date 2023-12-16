@@ -10,7 +10,6 @@ def save_as_wav(self, amplitude):
   amplitude_array = np.array(amplitude)
 
   wavfile.write(f"dataset/outputs/output_{self.output_num}.wav", self.output_signal.sample_rate, amplitude_array.astype(np.int16))
-  print(f"output_{self.output_num}")
   self.output_num = self.output_num + 1
 
 def browse_audio(self):
