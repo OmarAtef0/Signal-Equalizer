@@ -172,9 +172,9 @@ class SignalEqualizer(QMainWindow):
     self.ui.plot_2.plot(self.output_signal.time, self.output_signal.t_amplitude)
     self.ui.plot_3.plot(self.output_signal.frequency, self.output_signal.f_amplitude)
     
-    # self.ui.plot_1.plotItem.enableAutoRange(pg.ViewBox.YAxis, enable=False)
-    # self.ui.plot_2.plotItem.enableAutoRange(pg.ViewBox.YAxis, enable=False)
-    # self.ui.plot_3.plotItem.enableAutoRange(pg.ViewBox.YAxis, enable=False)
+    self.ui.plot_1.plotItem.enableAutoRange(pg.ViewBox.YAxis, enable=False)
+    self.ui.plot_2.plotItem.enableAutoRange(pg.ViewBox.YAxis, enable=False)
+    self.ui.plot_3.plotItem.enableAutoRange(pg.ViewBox.YAxis, enable=False)
     
     self.draw_spectrograms()
 
