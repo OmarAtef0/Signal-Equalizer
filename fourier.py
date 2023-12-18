@@ -13,6 +13,7 @@ def fourier_transfrom(self, time, amplitude):
   
   # Perform FFT
   fft_coef = fft.rfft(amplitude)
+  
   # Calculate frequencies corresponding to the FFT result
   # This lines calculate the frequencies corresponding to the FFT result. fft.fftfreq function is used to 
   # generate an array of frequency values based on the length of the time array and the time step between samples.
@@ -46,10 +47,11 @@ def inverse_fourier(self):
   if len(self.output_signal.t_amplitude) < len(self.input_signal.t_amplitude):
     self.output_signal.t_amplitude = np.append(self.output_signal.t_amplitude, 0)
 
-  self.output_signal.t_amplitude = controls.moving_average(self.output_signal.t_amplitude, self.ecg_value)
-  print(self.ecg_value)
+  self.output_signal.t_amplitude = np.convolve(self.output_signal.t_amplitude, np.ones(5)/5, mode='same')
   self.ecg_value += 1
-  self.draw()
+  
+  self.ui.plot_2.clear()
+  self.ui.plot_2.plot(self.output_signal.time, self.output_signal.t_amplitude)
   
 
   

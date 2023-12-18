@@ -34,21 +34,21 @@ def read(wav_file, ok):
     frequency = fft.fftfreq(len(t_amp), d=1/sample_rate)
     
     # Plot the frequency spectrum
-    # plt.figure(figsize=(12, 6))
-    # positive_frequencies = frequency[frequency >= 0]
-    # plt.plot(positive_frequencies, np.abs(f_amp[frequency >= 0]))
-    # if ok:
-    #     plt.title('Input Frequency Spectrum')
-    #     plt.xlabel('Frequency (Hz)')
-    #     plt.ylabel('Magnitude')
-    #     # plt.ylim(0, 30000)    
-    #     plt.show()
-    # else:
-    #     plt.title('Output Frequency Spectrum')
-    #     plt.xlabel('Frequency (Hz)')
-    #     plt.ylabel('Magnitude')
-    #     # plt.ylim(0, 30000)
-    #     plt.show()
+    plt.figure(figsize=(12, 6))
+    positive_frequencies = frequency[frequency >= 0]
+    plt.plot(positive_frequencies, np.abs(f_amp[frequency >= 0]))
+    if ok:
+        plt.title('Input Frequency Spectrum')
+        plt.xlabel('Frequency (Hz)')
+        plt.ylabel('Magnitude')
+        # plt.ylim(0, 30000)    
+        plt.show()
+    else:
+        plt.title('Output Frequency Spectrum')
+        plt.xlabel('Frequency (Hz)')
+        plt.ylabel('Magnitude')
+        # plt.ylim(0, 30000)
+        plt.show()
 
 def cut_bandwidth(input_file, output_file, low_freq, high_freq):
     # Load the audio file
@@ -80,16 +80,16 @@ lst = ["100"]
 
 for inst in lst:
     print(inst)
-    input_file_path = f"dataset/Animals/anis/{inst}.wav"
-    output_file_path = f'dataset/Animals/anis/final/output-{inst}.wav'
+    input_file_path = f"dataset\Music\hazem\output-piano2_extended.wav"
+    # output_file_path = f'dataset/Animals/anis/final/output-{inst}.wav'
 
     # Set the frequency range to cut
     low_freq = 4000
     high_freq = 24000
 
     # Cut bandwidth and play the modified audio%
-    cut_bandwidth(input_file_path, output_file_path, low_freq, high_freq)
+    # cut_bandwidth(input_file_path, output_file_path, low_freq, high_freq)
 
     read(input_file_path, True)
-    read(output_file_path, False)
-    play_wav_file(output_file_path)
+    # read(output_file_path, False)
+    # play_wav_file(output_file_path)

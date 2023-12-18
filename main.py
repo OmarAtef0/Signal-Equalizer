@@ -103,9 +103,12 @@ class SignalEqualizer(QMainWindow):
     self.axes1, self.figure1 = None, None
     self.axes2, self.figure2 = None, None
 
+    self.current_range = []
+    self.window_type = ""
+
     self.uniform_freq_ranges =[
       [0,1000],
-      [1000, 2000],
+      [1000, 2000], 
       [2000, 3000],
       [3000, 4000],
       [4000, 5000],
@@ -115,13 +118,21 @@ class SignalEqualizer(QMainWindow):
       [8000, 9000],
       [9000, 10000],
     ]
+    # self.music_freq_ranges = [
+    #   [0, 800], #sax
+    #   [801, 1700], #clarinet
+    #   [1701, 3000], #accordion2
+    #   [3001, 25000] #drums
+    #   ]
+    # self.music_names = ["sax", "clarinet" , "accordion" ,"drums"]
+
     self.music_freq_ranges = [
-      [0, 800], #sax
-      [801, 1700], #clarinet
-      [1701, 3000], #accordion2
-      [3001, 25000] #drums
+      [0, 600], 
+      [601, 1000], 
+      [1001, 2000], 
+      [2001, 25000] 
       ]
-    self.music_names = ["sax", "clarinet" , "accordion" ,"drums"]
+    self.music_names = ["piano", "glockspiel" , "guitar" ,"violin"]
 
     self.animal_freq_ranges = [
       [0, 1000], #dog
@@ -132,15 +143,18 @@ class SignalEqualizer(QMainWindow):
     self.animal_names = [ "dog", "cow", "cat", "bird" ]
 
     self.arrythmia_freq_ranges = [
-      [20, 50],  #arrythmia_1
-      [20, 50],  #arrythmia_2
-      [20, 50],  #arrythmia_3
-      [20, 50]   #normal
+      [50, 170],  #arrythmia_1
+      [50, 170],  #arrythmia_2
+      [50, 170],  #arrythmia_3
+      [50, 170]   #normal
       ]
     
     self.ui.ShowHide_1.stateChanged.connect(lambda: spectogram.toggle_spectrogram(self, self.ui.Spectrogram_1))
     self.ui.ShowHide_2.stateChanged.connect(lambda: spectogram.toggle_spectrogram(self, self.ui.Spectrogram_2))
     self.target_indices = []
+
+    self.window_function = []
+    self.x_overlay = []
 
     # Initialize pygame mixer
     pygame.mixer.init()
@@ -157,10 +171,10 @@ class SignalEqualizer(QMainWindow):
     self.ui.plot_1.plot(self.input_signal.time, self.input_signal.t_amplitude)
     self.ui.plot_2.plot(self.output_signal.time, self.output_signal.t_amplitude)
     self.ui.plot_3.plot(self.output_signal.frequency, self.output_signal.f_amplitude)
-
-    self.ui.plot_1.plotItem.enableAutoRange(pg.ViewBox.YAxis, enable=False)
-    self.ui.plot_2.plotItem.enableAutoRange(pg.ViewBox.YAxis, enable=False)
-    self.ui.plot_3.plotItem.enableAutoRange(pg.ViewBox.YAxis, enable=False)
+    
+    # self.ui.plot_1.plotItem.enableAutoRange(pg.ViewBox.YAxis, enable=False)
+    # self.ui.plot_2.plotItem.enableAutoRange(pg.ViewBox.YAxis, enable=False)
+    # self.ui.plot_3.plotItem.enableAutoRange(pg.ViewBox.YAxis, enable=False)
     
     self.draw_spectrograms()
 
@@ -247,6 +261,12 @@ class SignalEqualizer(QMainWindow):
     self.input_signal = Signal()
     self.output_signal = Signal()
 
+    self.generated_audio_file = False
+    self.current_range = []
+    self.window_type = ""
+    self.output_num = 1
+    self.audio_file = ""
+
     #clear spectrogram
     spectogram.clear_spectrogram(self.ui.Spectrogram_1)
     spectogram.clear_spectrogram(self.ui.Spectrogram_2)
@@ -320,6 +340,7 @@ class SignalEqualizer(QMainWindow):
 
         self.fsample = 1 / (time[1] - time[0])
         self.browsed_signal = SampledSignal(self.fsample, amplitude)
+        self.browsed_signal.amplitude = [x * (-1) for x in self.browsed_signal.amplitude]
         self.input_signal = Signal(self.browsed_signal.time, self.browsed_signal.amplitude)
         self.output_signal = Signal(self.browsed_signal.time, self.browsed_signal.amplitude)
         

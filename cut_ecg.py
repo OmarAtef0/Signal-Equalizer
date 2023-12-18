@@ -42,6 +42,8 @@ def cut_frequency_range_and_plot(csv_file, start_freq, end_freq, scale_factor=1)
     signal_filtered = fft.irfft(signal_fft)
     signal_filtered = np.append(signal_filtered, 0)
 
+    signal_filtered = np.convolve(signal_filtered, np.ones(10)/10, mode='same')
+
     plt.subplot(4, 1, 2)
     plt.plot(time[0:1000], signal_filtered[0:1000], label=f'Filtered Signal ({start_freq} - {end_freq} Hz)')
     plt.title('Filtered ECG Signal')
@@ -61,7 +63,7 @@ def cut_frequency_range_and_plot(csv_file, start_freq, end_freq, scale_factor=1)
 
 # Example usage:
 ecg_csv_file = "dataset\ECG\data\\arrythmia_1.csv"
-cut_start_freq = 20
-cut_end_freq = 50
+cut_start_freq = 50
+cut_end_freq = 170
 
-cut_frequency_range_and_plot(ecg_csv_file, cut_start_freq, cut_end_freq, 0.9)
+cut_frequency_range_and_plot(ecg_csv_file, cut_start_freq, cut_end_freq, 0)
