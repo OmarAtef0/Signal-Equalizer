@@ -3,26 +3,32 @@ import fourier
 from scipy.signal.windows import boxcar, hamming, hann, gaussian
 from PyQt5.QtWidgets import *
 import pyqtgraph as pg
+import os
 
 def update_plot(self, index, value):
   if self.current_mode == "Uniform Range Mode":
-    # print(self.uniform_freq_ranges[index])
     update_frequency_range(self, self.uniform_freq_ranges[index], 10**(value))
-  
   elif self.current_mode == "Musical Instruments Mode":
-    # print("music range: ", self.music_freq_ranges[index])
     update_frequency_range(self , self.music_freq_ranges[index], 10**(value))
-
   elif self.current_mode == "Animals Sound Mode":
     update_frequency_range(self , self.animal_freq_ranges[index], 10**(value))
-
   elif self.current_mode == "ECG Mode":
-    update_frequency_range(self , self.arrythmia_freq_ranges[index], 0)
-    
+    filename = os.path.basename(self.csv_file)
+    print("ECG value: ", value)
+    if (filename == "atrial premature beat.csv" and index == 0) or (filename == "atrial flutter.csv" and index == 1) or (filename == "atrial fibrillation.csv" and index == 2):
+      if value == 0:
+        self.smooth = True
+      print("MAZBOOT")
+      update_frequency_range(self, self.arrythmia_freq_ranges[index], value)
+    elif (filename == "normal.csv" and index == 3):
+       pass
+       #add arrythmia
+
   fourier.inverse_fourier(self)
 
 def update_frequency_range(self, target_frequency_range, value):
   # print("target range: ", target_frequency_range)
+
   self.window_type = self.ui.comboBox.currentText()
   self.target_indices = []
 

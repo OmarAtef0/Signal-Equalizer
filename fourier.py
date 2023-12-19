@@ -6,7 +6,7 @@ import controls
 def set_signal_attributes(self, signal, frequencies, fourier_coefficients):
   signal.frequency = frequencies
   signal.f_ampltiude = np.abs(fourier_coefficients)
-  signal.angel = np.angle(fourier_coefficients)
+  signal.angle = np.angle(fourier_coefficients)
   signal.f_coef = fourier_coefficients
   
 def fourier_transfrom(self, time, amplitude):
@@ -24,19 +24,19 @@ def fourier_transfrom(self, time, amplitude):
   
   self.input_signal.frequency = list(frequency)
   self.input_signal.f_amplitude = list(fft_amplitudes)
-  self.input_signal.f_angle = list(fft_angle)
-  self.input_signal.f_coef = list(fft_coef)
+  self.input_signal.fft_angle = list(fft_angle)
+  self.input_signal.fft_coef = list(fft_coef)
 
   self.output_signal.frequency = list(frequency)
   self.output_signal.f_amplitude = list(fft_amplitudes)
-  self.output_signal.f_angle = list(fft_angle)
-  self.output_signal.f_coef = list(fft_coef)
+  self.output_signal.fft_angle = list(fft_angle)
+  self.output_signal.fft_coef = list(fft_coef)
 
   self.original_signal_f_amplitude = list(self.output_signal.f_amplitude)
 
 def inverse_fourier(self):
   #perform Inverse Fourier Transform
-  fft_complex_amplitudes = fft.irfft(np.array(self.output_signal.f_amplitude) * np.exp(1j * np.array(self.output_signal.f_angle)))
+  fft_complex_amplitudes = fft.irfft(np.array(self.output_signal.f_amplitude) * np.exp(1j * np.array(self.output_signal.fft_angle)))
   
   if self.current_mode == "Musical Instruments Mode" or self.current_mode == "Animals Sound Mode":
    audio.save_as_wav(self, self.output_signal.t_amplitude)   
@@ -47,11 +47,19 @@ def inverse_fourier(self):
   if len(self.output_signal.t_amplitude) < len(self.input_signal.t_amplitude):
     self.output_signal.t_amplitude = np.append(self.output_signal.t_amplitude, 0)
 
-  self.output_signal.t_amplitude = np.convolve(self.output_signal.t_amplitude, np.ones(5)/5, mode='same')
-  self.ecg_value += 1
+  if self.current_mode == "ECG Mode":
+     self.output_signal.t_amplitude *= 0.345
   
   self.ui.plot_2.clear()
-  self.ui.plot_2.plot(self.output_signal.time, self.output_signal.t_amplitude)
+
+  if self.smooth == True:
+    self.smooth = False
+    print("graph smoothed")
+    smooth_t_amplitude = np.convolve(self.output_signal.t_amplitude, np.ones(5)/5, mode='same')
+    self.ui.plot_2.plot(self.output_signal.time, smooth_t_amplitude)
+  else:
+    print("graph original")
+    self.ui.plot_2.plot(self.output_signal.time, self.output_signal.t_amplitude)
   
 
   

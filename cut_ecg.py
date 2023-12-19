@@ -30,7 +30,6 @@ def cut_frequency_range_and_plot(csv_file, start_freq, end_freq, scale_factor=1)
     plt.title('Original Signal Spectrum')
     plt.xlabel('Frequency (Hz)')
     plt.ylabel('Amplitude')
-    plt.ylim(0, 10000)  
 
     # Identify the indices corresponding to the frequency range to be scaled
     cut_indices = np.where((frequencies >= start_freq) & (frequencies <= end_freq))
@@ -42,7 +41,7 @@ def cut_frequency_range_and_plot(csv_file, start_freq, end_freq, scale_factor=1)
     signal_filtered = fft.irfft(signal_fft)
     signal_filtered = np.append(signal_filtered, 0)
 
-    signal_filtered = np.convolve(signal_filtered, np.ones(10)/10, mode='same')
+    # signal_filtered = np.convolve(signal_filtered, np.ones(5)/5, mode='same')
 
     plt.subplot(4, 1, 2)
     plt.plot(time[0:1000], signal_filtered[0:1000], label=f'Filtered Signal ({start_freq} - {end_freq} Hz)')
@@ -50,20 +49,18 @@ def cut_frequency_range_and_plot(csv_file, start_freq, end_freq, scale_factor=1)
     plt.xlabel('Time (s)')
     plt.ylabel('Amplitude')
 
-
     plt.subplot(4, 2, 6)
     plt.plot(frequencies, np.abs(signal_fft), label='Filtered Spectrum')
     plt.title('Filtered Signal Spectrum')
     plt.xlabel('Frequency (Hz)')
     plt.ylabel('Amplitude')
-    plt.ylim(0, 10000)  
 
     plt.tight_layout()
     plt.show()
 
 # Example usage:
-ecg_csv_file = "dataset\ECG\data\\arrythmia_1.csv"
-cut_start_freq = 50
-cut_end_freq = 170
+ecg_csv_file = "dataset\ECG\\atrial premature beat.csv"
+cut_start_freq = 20
+cut_end_freq = 120
 
 cut_frequency_range_and_plot(ecg_csv_file, cut_start_freq, cut_end_freq, 0)

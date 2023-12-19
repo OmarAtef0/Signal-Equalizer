@@ -7,6 +7,8 @@ from task3 import Ui_MainWindow
 import pyqtgraph as pg
 from classes import *
 import pygame
+import qdarkstyle
+
 
 #IMPORT MODULES
 import audio
@@ -45,12 +47,6 @@ class SignalEqualizer(QMainWindow):
     }
     
     self.num_of_sliders = self.sliders_dict[self.current_mode]
-    
-    # scroll bars
-    self.ui.horizontalScrollBar_1.valueChanged.connect(self.scroll_x)
-    self.ui.horizontalScrollBar_2.valueChanged.connect(self.scroll_x)
-    self.ui.verticalScrollBar_1.valueChanged.connect(self.scroll_y)
-    self.ui.verticalScrollBar_2.valueChanged.connect(self.scroll_y)
 
     # mouse
     # self.ui.plot_1.setMouseEnabled(x=False, y=False)
@@ -94,11 +90,13 @@ class SignalEqualizer(QMainWindow):
     self.ui.plot_2.setLabel('bottom', 'Time (s)')
     self.ui.plot_3.setLabel('left', 'Amplitude')
     self.ui.plot_3.setLabel('bottom', 'Frequency (Hz)')
-    self.ecg_value = 5
+    self.csv_file = ""
 
     self.ui.comboBox.currentIndexChanged.connect(lambda: controls.visualize_window(self))
     self.Gaussian_std = 5
     self.output_num = 1
+    self.sliders_on_off = False
+    self.smooth = False
 
     self.axes1, self.figure1 = None, None
     self.axes2, self.figure2 = None, None
@@ -118,13 +116,6 @@ class SignalEqualizer(QMainWindow):
       [8000, 9000],
       [9000, 10000],
     ]
-    # self.music_freq_ranges = [
-    #   [0, 800], #sax
-    #   [801, 1700], #clarinet
-    #   [1701, 3000], #accordion2
-    #   [3001, 25000] #drums
-    #   ]
-    # self.music_names = ["sax", "clarinet" , "accordion" ,"drums"]
 
     self.music_freq_ranges = [
       [0, 600], 
@@ -135,19 +126,20 @@ class SignalEqualizer(QMainWindow):
     self.music_names = ["piano", "glockspiel" , "guitar" ,"violin"]
 
     self.animal_freq_ranges = [
-      [0, 1000], #dog
-      [1001, 1800], #cow
-      [1801, 4000], #cat
-      [4001, 24000] #bird
+      [0, 1000], 
+      [1001, 1800], 
+      [1801, 4000], 
+      [4001, 24000]
       ]
     self.animal_names = [ "dog", "cow", "cat", "bird" ]
 
     self.arrythmia_freq_ranges = [
-      [50, 170],  #arrythmia_1
-      [50, 170],  #arrythmia_2
-      [50, 170],  #arrythmia_3
-      [50, 170]   #normal
+      [20, 100], 
+      [30, 75], 
+      [50, 60],  
+      [0, 0]    
       ]
+    self.arryhtmia_names = [ "atrial premature beat", "atrial flutter", "atrial fibrillation", "normal" ]
     
     self.ui.ShowHide_1.stateChanged.connect(lambda: spectogram.toggle_spectrogram(self, self.ui.Spectrogram_1))
     self.ui.ShowHide_2.stateChanged.connect(lambda: spectogram.toggle_spectrogram(self, self.ui.Spectrogram_2))
@@ -186,39 +178,8 @@ class SignalEqualizer(QMainWindow):
       self.timer.start(100)
       self.ui.play_pause_btn.setText("Pause")
 
-  def find_limits(self):
-    self.MaxX = max(self.input_signal.time)
-    self.MinX = min(self.input_signal.time)
-
-    self.MaxY = max(self.input_signal.t_amplitude)
-    self.MinY = min(self.input_signal.t_amplitude)
-
-  def scroll_y(self, value):
-    self.find_limits()
-    min_y = self.MinY + value / 100
-    max_y = self.MaxY + value / 100
-
-    self.ui.plot_1.setYRange(min_y, max_y)
-    self.ui.plot_2.setYRange(min_y, max_y)
-
-  def scroll_x(self, value):
-    scroll_window = self.x_range[1] - self.x_range[0]
-    x_min = value / 100.0 * (scroll_window)
-    x_max = x_min + scroll_window
-
-    self.x_range = [x_min, x_max]
-    self.ui.plot_1.setXRange(self.x_range[0], self.x_range[1])
-    self.ui.plot_2.setXRange(self.x_range[0], self.x_range[1])
-
   def reset_plots(self):
-    # if self.ui.play_pause_btn.text() == "Pause" and self.current_mode == "Musical Instruments Mode" or self.current_mode == "Animals Sound Mode":
-    #   audio._play_audio(self)
-
     self.x_range = [0.0, 4.0]
-    self.ui.verticalScrollBar_1.setValue(0)
-    self.ui.horizontalScrollBar_1.setValue(0)
-    self.ui.verticalScrollBar_2.setValue(0)
-    self.ui.horizontalScrollBar_2.setValue(0)
     self.ui.speed_slider.setValue(4)
     self.x_range_speed = 0.04
     
@@ -226,9 +187,6 @@ class SignalEqualizer(QMainWindow):
     self.ui.plot_2.setXRange(self.x_range[0], self.x_range[1])
 
   def update_plots(self):
-    # if not self.playing:
-    #   return
-
     self.x_range = [self.x_range[0] + self.x_range_speed, self.x_range[1] + self.x_range_speed]
 
     self.ui.plot_1.setXRange(self.x_range[0], self.x_range[1])
@@ -246,17 +204,15 @@ class SignalEqualizer(QMainWindow):
     self.x_range_speed = (value / 100.0) + 0.10
 
   def clear(self):
-    #clear plots
     self.ui.plot_1.clear() 
     self.ui.plot_2.clear()
     self.ui.plot_3.clear()
     self.ui.plot_5.clear()
 
-    # for slider_number in range(1, 11):
-    #   slider = getattr(self.ui, f"verticalSlider_{slider_number}")
-    #   slider.setValue(0)
+    for slider_number in range(1, 11):
+      slider = getattr(self.ui, f"verticalSlider_{slider_number}")
+      slider.setValue(0)
 
-    #clear input and output
     self.browsed_signal = SampledSignal()
     self.input_signal = Signal()
     self.output_signal = Signal()
@@ -267,7 +223,6 @@ class SignalEqualizer(QMainWindow):
     self.output_num = 1
     self.audio_file = ""
 
-    #clear spectrogram
     spectogram.clear_spectrogram(self.ui.Spectrogram_1)
     spectogram.clear_spectrogram(self.ui.Spectrogram_2)
 
@@ -282,6 +237,9 @@ class SignalEqualizer(QMainWindow):
           action.setChecked(False)
     
     print("current mode: ",self.current_mode)
+    if self.current_mode == "ECG Mode":
+      self.sliders_on_off = True
+
     self.ui.mode_title.setText(self.current_mode)
 
     self.num_of_sliders = self.sliders_dict[self.current_mode]
@@ -291,7 +249,23 @@ class SignalEqualizer(QMainWindow):
       label1 = getattr(self.ui, f"label_{slider_number}")
       label2 = getattr(self.ui, f"label_{10 + slider_number}")
       label3 = getattr(self.ui, f"label_{20 + slider_number}")
-      
+
+      if self.current_mode == "ECG Mode":
+        label1.setText("0")
+        label2.setText("1")
+      else:
+        label1.setText("10^(-5)")
+        label2.setText("10^(3)")
+
+      if self.sliders_on_off:
+        slider.setMinimum(0)
+        slider.setMaximum(1)
+        slider.setValue(1)
+      else:
+        slider.setMinimum(-5)
+        slider.setMaximum(3)
+        slider.setValue(0)
+
       # initialize vertical sliders
       if slider_number <= self.num_of_sliders:
         slider.valueChanged.connect(lambda value, slider_number=slider_number-1: controls.update_plot(self, slider_number, value))
@@ -308,10 +282,7 @@ class SignalEqualizer(QMainWindow):
           elif self.current_mode == "Animals Sound Mode":
             label3.setText(f"{self.animal_names[slider_number-1]}")
           else: # ECG Mode
-            if slider_number < 4:
-              label3.setText(f"Arrthymia_{slider_number}")
-            else:
-              label3.setText(f"Normal ECG")
+            label3.setText(f"{self.arryhtmia_names[slider_number-1]}")
             
       # hiding unused sliders
       if slider_number > self.num_of_sliders:
@@ -325,6 +296,8 @@ class SignalEqualizer(QMainWindow):
     options |= QFileDialog.ReadOnly
 
     file_path, _ = QFileDialog.getOpenFileName(self, "Open CSV File", "", "CSV Files (*.csv);;All Files (*)", options=options)
+    self.csv_file = file_path
+    print(file_path)
 
     if file_path:
         time = []
@@ -359,6 +332,7 @@ class SignalEqualizer(QMainWindow):
       
 if __name__ == "__main__":
   app = QApplication(sys.argv)
+  app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6())
   window = SignalEqualizer()
   window.setWindowTitle("Signal Equalizer")
   app.setWindowIcon(QIcon("assets/logo.jpg"))
