@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy import fft 
+import random
 
 def cut_frequency_range_and_plot(csv_file, start_freq, end_freq, scale_factor=1):
     # Load ECG signal from CSV file
@@ -42,6 +43,13 @@ def cut_frequency_range_and_plot(csv_file, start_freq, end_freq, scale_factor=1)
     signal_filtered = np.append(signal_filtered, 0)
 
     # signal_filtered = np.convolve(signal_filtered, np.ones(5)/5, mode='same')
+    # signal_filtered = [x + random.uniform(-0.1, 0.05) for x in signal_filtered]
+
+    # # Create a DataFrame with time and filtered signal
+    # output_data = pd.DataFrame({'Time': time, 'Filtered Signal': signal_filtered})
+
+    # # Save the DataFrame to a CSV file
+    # output_data.to_csv("dataset\ECG\\normal_output.csv", index=False)
 
     plt.subplot(4, 1, 2)
     plt.plot(time[0:1000], signal_filtered[0:1000], label=f'Filtered Signal ({start_freq} - {end_freq} Hz)')
@@ -59,8 +67,8 @@ def cut_frequency_range_and_plot(csv_file, start_freq, end_freq, scale_factor=1)
     plt.show()
 
 # Example usage:
-ecg_csv_file = "dataset\ECG\\atrial premature beat.csv"
+ecg_csv_file = "dataset\ECG\\normal_output.csv"
 cut_start_freq = 20
-cut_end_freq = 120
+cut_end_freq = 50
 
-cut_frequency_range_and_plot(ecg_csv_file, cut_start_freq, cut_end_freq, 0)
+cut_frequency_range_and_plot(ecg_csv_file, cut_start_freq, cut_end_freq, 0.1)

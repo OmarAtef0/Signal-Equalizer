@@ -4,6 +4,7 @@ from scipy.signal.windows import boxcar, hamming, hann, gaussian
 from PyQt5.QtWidgets import *
 import pyqtgraph as pg
 import os
+import time
 
 def update_plot(self, index, value):
   if self.current_mode == "Uniform Range Mode":
@@ -14,15 +15,18 @@ def update_plot(self, index, value):
     update_frequency_range(self , self.animal_freq_ranges[index], 10**(value))
   elif self.current_mode == "ECG Mode":
     filename = os.path.basename(self.csv_file)
-    print("ECG value: ", value)
     if (filename == "atrial premature beat.csv" and index == 0) or (filename == "atrial flutter.csv" and index == 1) or (filename == "atrial fibrillation.csv" and index == 2):
       if value == 0:
         self.smooth = True
-      print("MAZBOOT")
-      update_frequency_range(self, self.arrythmia_freq_ranges[index], value)
+        update_frequency_range(self, self.arrythmia_freq_ranges[index], 0.1)
     elif (filename == "normal.csv" and index == 3):
-       pass
-       #add arrythmia
+      if value == 0:
+        self.smooth = True
+        update_frequency_range(self, self.arrythmia_freq_ranges[index], 10)
+    elif filename != "":
+      time.sleep(0.35)
+      # print("sleeep")
+      return
 
   fourier.inverse_fourier(self)
 

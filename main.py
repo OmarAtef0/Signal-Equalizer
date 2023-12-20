@@ -137,7 +137,7 @@ class SignalEqualizer(QMainWindow):
       [20, 100], 
       [30, 75], 
       [50, 60],  
-      [0, 0]    
+      [20, 50]    
       ]
     self.arryhtmia_names = [ "atrial premature beat", "atrial flutter", "atrial fibrillation", "normal" ]
     

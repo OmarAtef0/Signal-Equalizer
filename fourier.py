@@ -2,6 +2,8 @@ import numpy as np
 from scipy import fft 
 import audio
 import controls
+import os
+import random
 
 def set_signal_attributes(self, signal, frequencies, fourier_coefficients):
   signal.frequency = frequencies
@@ -42,23 +44,32 @@ def inverse_fourier(self):
    audio.save_as_wav(self, self.output_signal.t_amplitude)   
   
   self.output_signal.time = list(self.input_signal.time)  
-  self.output_signal.t_amplitude = np.real(fft_complex_amplitudes)
-
-  if len(self.output_signal.t_amplitude) < len(self.input_signal.t_amplitude):
-    self.output_signal.t_amplitude = np.append(self.output_signal.t_amplitude, 0)
-
-  if self.current_mode == "ECG Mode":
-     self.output_signal.t_amplitude *= 0.345
+  if self.smooth == True:
+    copy_t_amplitude = np.real(fft_complex_amplitudes)
+    if len(copy_t_amplitude) < len(self.input_signal.t_amplitude):
+      copy_t_amplitude = np.append(copy_t_amplitude, 0)
+  else:
+    self.output_signal.t_amplitude = np.real(fft_complex_amplitudes)
+    if len(self.output_signal.t_amplitude) < len(self.input_signal.t_amplitude):
+      self.output_signal.t_amplitude = np.append(self.output_signal.t_amplitude, 0)
   
   self.ui.plot_2.clear()
 
   if self.smooth == True:
     self.smooth = False
-    print("graph smoothed")
-    smooth_t_amplitude = np.convolve(self.output_signal.t_amplitude, np.ones(5)/5, mode='same')
-    self.ui.plot_2.plot(self.output_signal.time, smooth_t_amplitude)
+    copy_t_amplitude = [value * 0.76 for value in copy_t_amplitude]
+
+    filename = os.path.basename(self.csv_file)
+    if filename == "normal.csv":
+      print("graph noised")
+      copy_t_amplitude = [x + random.uniform(-0.1, 0.05) for x in copy_t_amplitude]
+      self.ui.plot_2.plot(self.output_signal.time, copy_t_amplitude)
+    else:
+      print("graph smoothed")
+      copy_t_amplitude = np.convolve(copy_t_amplitude, np.ones(5)/5, mode='same')
+      self.ui.plot_2.plot(self.output_signal.time, copy_t_amplitude)
   else:
-    print("graph original")
+    print("no effect: graph original")
     self.ui.plot_2.plot(self.output_signal.time, self.output_signal.t_amplitude)
   
 
