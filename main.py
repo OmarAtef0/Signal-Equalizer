@@ -9,7 +9,6 @@ from classes import *
 import pygame
 import qdarkstyle
 
-
 #IMPORT MODULES
 import audio
 import controls
@@ -96,12 +95,16 @@ class SignalEqualizer(QMainWindow):
     self.Gaussian_std = 5
     self.output_num = 1
     self.sliders_on_off = False
-    self.smooth = False
+
 
     self.axes1, self.figure1 = None, None
     self.axes2, self.figure2 = None, None
 
     self.current_range = []
+    self.label_names = []
+    self.value = 0
+    self.index = 0
+
     self.window_type = ""
 
     self.uniform_freq_ranges =[
@@ -116,6 +119,7 @@ class SignalEqualizer(QMainWindow):
       [8000, 9000],
       [9000, 10000],
     ]
+    self.uniform_names = [0, 1001, 2001, 3001, 4001, 5001, 6001, 7001, 8001, 9001]
 
     self.music_freq_ranges = [
       [0, 600], 
@@ -137,7 +141,7 @@ class SignalEqualizer(QMainWindow):
       [20, 100], 
       [30, 75], 
       [50, 60],  
-      [20, 50]    
+      [20, 30]    
       ]
     self.arryhtmia_names = [ "atrial premature beat", "atrial flutter", "atrial fibrillation", "normal" ]
     
@@ -235,13 +239,23 @@ class SignalEqualizer(QMainWindow):
       for action in self.ui.menuModes.actions():
         if action.text() != self.current_mode:
           action.setChecked(False)
-    
-    print("current mode: ",self.current_mode)
-    if self.current_mode == "ECG Mode":
-      self.sliders_on_off = True
 
     self.ui.mode_title.setText(self.current_mode)
 
+    print("current mode: ",self.current_mode)
+    if self.current_mode == "Uniform Range Mode":
+      self.label_names = self.uniform_names
+      self.current_range = self.uniform_freq_ranges
+    elif self.current_mode == "Musical Instruments Mode":
+      self.label_names = self.music_names
+      self.current_range = self.music_freq_ranges
+    elif self.current_mode == "Animals Sound Mode":
+      self.label_names = self.animal_names
+      self.current_range = self.animal_freq_ranges
+    elif self.current_mode == "ECG Mode":
+      self.label_names = self.arryhtmia_names
+      self.current_range = self.arrythmia_freq_ranges
+    
     self.num_of_sliders = self.sliders_dict[self.current_mode]
 
     for slider_number in range(1, 11):
@@ -275,21 +289,17 @@ class SignalEqualizer(QMainWindow):
         label3.setVisible(True)
 
         if slider_number <= self.sliders_dict[self.current_mode]:
-          if self.current_mode == "Uniform Range Mode":
-            label3.setText(f"{self.uniform_freq_ranges[slider_number-1][0]}-{self.uniform_freq_ranges[slider_number-1][1]}")
-          elif self.current_mode == "Musical Instruments Mode":
-            label3.setText(f"{self.music_names[slider_number-1]}")
-          elif self.current_mode == "Animals Sound Mode":
-            label3.setText(f"{self.animal_names[slider_number-1]}")
-          else: # ECG Mode
-            label3.setText(f"{self.arryhtmia_names[slider_number-1]}")
-            
+          label3.setText(f"{self.label_names[slider_number-1]}")
+          
       # hiding unused sliders
       if slider_number > self.num_of_sliders:
         slider.setVisible(False)
         label1.setVisible(False)
         label2.setVisible(False)
         label3.setVisible(False)
+    
+    if self.current_mode == "ECG Mode":
+      self.sliders_on_off = True
   
   def browse_csv(self):
     options = QFileDialog.Options()

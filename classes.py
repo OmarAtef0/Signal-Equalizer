@@ -23,6 +23,7 @@ class Signal():
         self.frequency = frequency 
         self.f_amplitude = f_amplitude
         self.fft_coef = fft_coef
-        self.fft_agnle = fft_angle
+        self.fft_angle = fft_angle
         self.sample_rate = sample_rate
+        self.t_amp = []
 

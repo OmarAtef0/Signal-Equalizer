@@ -29,6 +29,7 @@ def fourier_transfrom(self, time, amplitude):
   self.input_signal.fft_angle = list(fft_angle)
   self.input_signal.fft_coef = list(fft_coef)
 
+
   self.output_signal.frequency = list(frequency)
   self.output_signal.f_amplitude = list(fft_amplitudes)
   self.output_signal.fft_angle = list(fft_angle)
@@ -38,39 +39,72 @@ def fourier_transfrom(self, time, amplitude):
 
 def inverse_fourier(self):
   #perform Inverse Fourier Transform
+  self.output_signal.time = list(self.input_signal.time) 
   fft_complex_amplitudes = fft.irfft(np.array(self.output_signal.f_amplitude) * np.exp(1j * np.array(self.output_signal.fft_angle)))
-  
+  self.output_signal.t_amp = np.real(fft_complex_amplitudes)
+
   if self.current_mode == "Musical Instruments Mode" or self.current_mode == "Animals Sound Mode":
-   audio.save_as_wav(self, self.output_signal.t_amplitude)   
-  
-  self.output_signal.time = list(self.input_signal.time)  
-  if self.smooth == True:
-    copy_t_amplitude = np.real(fft_complex_amplitudes)
-    if len(copy_t_amplitude) < len(self.input_signal.t_amplitude):
-      copy_t_amplitude = np.append(copy_t_amplitude, 0)
-  else:
     self.output_signal.t_amplitude = np.real(fft_complex_amplitudes)
     if len(self.output_signal.t_amplitude) < len(self.input_signal.t_amplitude):
-      self.output_signal.t_amplitude = np.append(self.output_signal.t_amplitude, 0)
+        self.output_signal.t_amplitude = np.append(self.output_signal.t_amplitude, 0)
+    audio.save_as_wav(self, self.output_signal.t_amplitude)   
   
-  self.ui.plot_2.clear()
+   
 
-  if self.smooth == True:
-    self.smooth = False
+  #INVERSE FOURIER DONEE
+
+
+
+
+
+
+
+
+
+
+  if self.current_mode == "ECG Mode":
+    filename = os.path.basename(self.csv_file)
+    if (filename == "atrial premature beat.csv" and self.index == 0) or (filename == "atrial flutter.csv" and self.index == 1) or (filename == "atrial fibrillation.csv" and self.index == 2):
+      if self.value == 0:
+        update(self, self.arrythmia_freq_ranges[self.index], 0.1)
+    elif (filename == "normal.csv" and self.index == 3):
+      if self.value == 0:
+        update(self, self.arrythmia_freq_ranges[self.index], 10)
+    else:
+      self.ui.plot_2.clear()
+      self.ui.plot_2.plot(self.output_signal.time, self.output_signal.t_amplitude)
+      return
+
+  if self.value == 0:
+    copy_t_amplitude = np.real(list(fft_complex_amplitudes))
+    if len(copy_t_amplitude) < len(self.input_signal.t_amplitude):
+      copy_t_amplitude = np.append(copy_t_amplitude, 0)
     copy_t_amplitude = [value * 0.76 for value in copy_t_amplitude]
 
     filename = os.path.basename(self.csv_file)
+    self.ui.plot_2.clear()
     if filename == "normal.csv":
-      print("graph noised")
       copy_t_amplitude = [x + random.uniform(-0.1, 0.05) for x in copy_t_amplitude]
       self.ui.plot_2.plot(self.output_signal.time, copy_t_amplitude)
     else:
-      print("graph smoothed")
       copy_t_amplitude = np.convolve(copy_t_amplitude, np.ones(5)/5, mode='same')
       self.ui.plot_2.plot(self.output_signal.time, copy_t_amplitude)
   else:
-    print("no effect: graph original")
+    self.ui.plot_2.clear()
     self.ui.plot_2.plot(self.output_signal.time, self.output_signal.t_amplitude)
   
+def update(self, target_frequency_range, value):
+  self.window_type = self.ui.comboBox.currentText()
+  self.target_indices = []
 
+  for i, frequency in enumerate(self.output_signal.frequency):
+    if target_frequency_range[0] < frequency <= target_frequency_range[1]:
+      self.target_indices.append(i)
+
+  window_function = controls.create_window_function(self, len(self.target_indices))
+  window_function *= value
+
+  for index, target_i in enumerate(self.target_indices):
+    if target_i >= 0 and target_i < len(self.output_signal.f_amplitude): 
+      self.output_signal.f_amplitude[target_i] = self.original_signal_f_amplitude[target_i] * window_function[index]
   

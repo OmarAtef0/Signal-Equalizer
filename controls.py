@@ -3,36 +3,16 @@ import fourier
 from scipy.signal.windows import boxcar, hamming, hann, gaussian
 from PyQt5.QtWidgets import *
 import pyqtgraph as pg
-import os
-import time
+
 
 def update_plot(self, index, value):
-  if self.current_mode == "Uniform Range Mode":
-    update_frequency_range(self, self.uniform_freq_ranges[index], 10**(value))
-  elif self.current_mode == "Musical Instruments Mode":
-    update_frequency_range(self , self.music_freq_ranges[index], 10**(value))
-  elif self.current_mode == "Animals Sound Mode":
-    update_frequency_range(self , self.animal_freq_ranges[index], 10**(value))
-  elif self.current_mode == "ECG Mode":
-    filename = os.path.basename(self.csv_file)
-    if (filename == "atrial premature beat.csv" and index == 0) or (filename == "atrial flutter.csv" and index == 1) or (filename == "atrial fibrillation.csv" and index == 2):
-      if value == 0:
-        self.smooth = True
-        update_frequency_range(self, self.arrythmia_freq_ranges[index], 0.1)
-    elif (filename == "normal.csv" and index == 3):
-      if value == 0:
-        self.smooth = True
-        update_frequency_range(self, self.arrythmia_freq_ranges[index], 10)
-    elif filename != "":
-      time.sleep(0.35)
-      # print("sleeep")
-      return
+  self.value = value
+  self.index = index
 
+  update_frequency_range(self, self.current_range[index], 10**(value))
   fourier.inverse_fourier(self)
 
 def update_frequency_range(self, target_frequency_range, value):
-  # print("target range: ", target_frequency_range)
-
   self.window_type = self.ui.comboBox.currentText()
   self.target_indices = []
 
@@ -40,30 +20,21 @@ def update_frequency_range(self, target_frequency_range, value):
     if target_frequency_range[0] < frequency <= target_frequency_range[1]:
       self.target_indices.append(i)
 
-  window_function = create_window_function(self, self.window_type, len(self.target_indices))
+  window_function = create_window_function(self, len(self.target_indices))
   window_function *= value
 
   for index, target_i in enumerate(self.target_indices):
     if target_i >= 0 and target_i < len(self.output_signal.f_amplitude): 
       self.output_signal.f_amplitude[target_i] = self.original_signal_f_amplitude[target_i] * window_function[index]
 
-  if self.current_mode == "Uniform Range Mode":
-      range_list = self.uniform_freq_ranges
-  elif self.current_mode == "Musical Instruments Mode":
-    range_list = self.music_freq_ranges
-  elif self.current_mode == "Animals Sound Mode":
-    range_list = self.animal_freq_ranges
-  else:
-    range_list = self.arrythmia_freq_ranges
-  
   self.ui.plot_3.clear()
   self.ui.plot_3.plot(self.output_signal.frequency, self.output_signal.f_amplitude)
   
-  for index, rng in enumerate(range_list):
+  for index, rng in enumerate(self.current_range):
     length = rng[1] - rng[0]
     self.x_overlay = np.arange(rng[0], rng[1])
 
-    self.window_function = create_window_function(self, self.window_type, length)
+    self.window_function = create_window_function(self, length)
 
     slider = getattr(self.ui, f"verticalSlider_{index + 1}")
     if slider.value() == 0:
@@ -72,7 +43,6 @@ def update_frequency_range(self, target_frequency_range, value):
       self.window_function *= max(self.output_signal.f_amplitude) 
 
     self.ui.plot_3.plot(self.x_overlay, self.window_function, pen=pg.mkPen(color='r'))
-    
      
 def visualize_window(self):
   self.ui.plot_5.clear()
@@ -83,11 +53,11 @@ def visualize_window(self):
     get_guassian_std(self)
   
   # Create and visualize the window
-  window_function = create_window_function(self, self.window_type, 100)
+  window_function = create_window_function(self, 100)
   x_values = np.arange(len(window_function))
   self.ui.plot_5.plot(x_values, window_function)
 
-def create_window_function(self, window_type, length):
+def create_window_function(self, length):
   window_function = None
   if self.window_type == "Rectangle":
       window_function = boxcar(length)
@@ -102,6 +72,7 @@ def create_window_function(self, window_type, length):
       raise ValueError("Invalid window type")
 
   return window_function
+
 
 def get_guassian_std(self):
   dialog = gaussain_std(self)
