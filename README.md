@@ -62,6 +62,10 @@ The Signal Equalizer is a versatile desktop application designed for manipulatin
 2. Install dependencies: `pip install -r requirements.txt`
 3. Run the application: `python main.py`
 
+## Contributors
+
+We would like to acknowledge the following individuals for their contributions:
+
 <table>
   <tr>
     <td align="center">
