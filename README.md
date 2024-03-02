@@ -62,7 +62,8 @@ The Signal Equalizer is a versatile desktop application designed for manipulatin
 2. Install dependencies: `pip install -r requirements.txt`
 3. Run the application: `python main.py`
 
-<tr>
+<table>
+  <tr>
     <td align="center">
       <a href="https://github.com/OmarAtef0" target="_black">
       <img src="https://avatars.githubusercontent.com/u/131784941?v=4" width="150px;" alt="Omar Atef"/>
@@ -88,4 +89,5 @@ The Signal Equalizer is a versatile desktop application designed for manipulatin
       <sub><b>Ahmed Khaled</b></sub></a>
     </td>  
   </tr>
+ </table>
 
